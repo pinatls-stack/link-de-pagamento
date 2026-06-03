@@ -198,9 +198,9 @@ export default function JornadaPage() {
               style={{
                 position: "absolute",
                 right: 24,
-                top: 415,
-                width: 96,
-                height: 96,
+                top: 484,
+                width: 116,
+                height: 116,
                 objectFit: "contain",
               }}
             />
