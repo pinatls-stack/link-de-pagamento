@@ -337,10 +337,10 @@ export default function JornadaPage() {
 
   return (
     <div
-      className="min-h-screen flex justify-center items-start"
+      className="min-h-screen flex justify-center items-center"
       style={{ background: "var(--secondary)" }}
     >
-      <div className="relative w-[390px] min-h-screen bg-background overflow-hidden flex flex-col">
+      <div className="relative w-[390px] h-[844px] bg-background overflow-hidden flex flex-col rounded-[40px] shadow-2xl">
 
         {/* Dynamic Island */}
         <div className="flex justify-center pt-3 flex-shrink-0">
