@@ -141,10 +141,10 @@ export default function JornadaPage() {
               className="text-[11px] font-semibold uppercase tracking-widest"
               style={{ color: "rgba(255,255,255,0.65)" }}
             >
-              Módulo 1 · Etapa 1
+              Lumina Gestão
             </p>
             <p className="text-[17px] font-semibold text-primary-foreground mt-0.5">
-              Configure seus pagamentos
+              Junho de 2026
             </p>
           </div>
           <div
@@ -177,7 +177,7 @@ export default function JornadaPage() {
               {/* Progress (completed + active) path */}
               <path
                 d={progressPath}
-                stroke="var(--chart-4)"
+                stroke="var(--success)"
                 strokeWidth={10}
                 strokeLinecap="round"
               />
@@ -247,9 +247,9 @@ export default function JornadaPage() {
                       height: NODE_SIZE,
                       ...(done
                         ? {
-                            background: "var(--chart-4)",
+                            background: "var(--success)",
                             color: "#fff",
-                            boxShadow: "0 5px 0 #b88a00, 0 7px 14px rgba(255,185,0,0.22)",
+                            boxShadow: "0 5px 0 #076e49, 0 7px 14px rgba(10,155,102,0.25)",
                           }
                         : active
                         ? {
@@ -277,7 +277,7 @@ export default function JornadaPage() {
                         <svg key={i} width="11" height="11" viewBox="0 0 10 10">
                           <path
                             d="M5 0L6.12 3.45H9.76L6.82 5.59L7.94 9.04L5 6.9L2.06 9.04L3.18 5.59L0.24 3.45H3.88L5 0Z"
-                            fill="var(--chart-4)"
+                            fill="var(--success)"
                           />
                         </svg>
                       ))}
