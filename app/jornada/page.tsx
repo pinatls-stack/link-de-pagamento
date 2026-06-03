@@ -103,10 +103,14 @@ function MonthSection({
   "data-month"?: string;
 }) {
   return (
-    <div data-month={dataMonth} style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}>
+    <div
+      data-month={dataMonth}
+      className="flex flex-col"
+      style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100%" }}
+    >
       {/* Banner */}
       <div
-        className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between"
+        className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0"
         style={{
           background: "var(--primary)",
           boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
@@ -132,7 +136,7 @@ function MonthSection({
       </div>
 
       {/* Track */}
-      <div className="relative" style={{ width: 390, height: 660 }}>
+      <div className="relative flex-1" style={{ minHeight: 0 }}>
         {/* Ilustração direita (Junho) */}
         {showIllustration && (
           // eslint-disable-next-line @next/next/no-img-element
