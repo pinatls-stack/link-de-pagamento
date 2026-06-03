@@ -236,21 +236,22 @@ function MonthSection({
 
               {/* Círculo */}
               <div
-                className="flex items-center justify-center rounded-full"
+                className="flex items-center justify-center"
                 style={{
                   width: NODE_SIZE,
                   height: NODE_SIZE,
+                  borderRadius: "50%",
                   ...(done
                     ? {
                         background: "var(--success)",
                         color: "#fff",
-                        boxShadow: "0 5px 0 #076e49, 0 7px 14px rgba(10,155,102,0.25)",
+                        boxShadow: "0 6px 16px rgba(10,155,102,0.35)",
                       }
                     : active
                     ? {
                         background: "var(--primary)",
                         color: "var(--primary-foreground)",
-                        boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
+                        boxShadow: "0 6px 18px rgba(117,55,174,0.4)",
                       }
                     : {
                         background: "var(--muted)",
