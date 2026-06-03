@@ -8,9 +8,6 @@ import {
   DollarSign,
   ClipboardList,
   Lock,
-  Flame,
-  Gem,
-  Heart,
   Home,
   BookOpen,
   Award,
@@ -137,32 +134,9 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Stats Header */}
-        <div
-          className="flex items-center justify-between px-4 py-2.5 flex-shrink-0 bg-background"
-          style={{ borderBottom: "1px solid var(--border)" }}
-        >
-          <div className="flex items-center gap-1.5">
-            <span className="text-base leading-none">🇧🇷</span>
-            <span className="text-sm font-bold text-foreground">14</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Flame size={18} className="text-orange-400" />
-            <span className="text-sm font-bold text-orange-400">12</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Gem size={18} className="text-sky-400" />
-            <span className="text-sm font-bold text-sky-400">527</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Heart size={18} className="text-destructive" />
-            <span className="text-sm font-bold text-destructive">5</span>
-          </div>
-        </div>
-
         {/* Section Banner */}
         <div
-          className="mx-4 mt-3 rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0"
+          className="mx-6 mt-3 rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0"
           style={{ background: "var(--primary)" }}
         >
           <div>
@@ -224,44 +198,44 @@ export default function JornadaPage() {
                   key={node.id}
                   style={{ position: "absolute", left: node.x, top: node.y }}
                 >
-                  {/* Tooltip da atividade (nó ativo) */}
+                  {/* Tooltip da atividade (nó ativo) — posicionado à esquerda */}
                   {active && (
                     <div
                       className="absolute rounded-xl bg-background"
                       style={{
                         top: 8,
-                        left: NODE_SIZE + 10,
+                        right: NODE_SIZE + 10,
                         padding: "8px 12px",
                         border: "1px solid var(--border)",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                        maxWidth: 130,
+                        width: 140,
                       }}
                     >
-                      {/* Arrow caret */}
+                      {/* Seta apontando para a direita (em direção ao nó) */}
                       <span
                         className="absolute"
                         style={{
-                          left: -7,
+                          right: -7,
                           top: "50%",
                           transform: "translateY(-50%)",
                           width: 0,
                           height: 0,
                           borderTop: "6px solid transparent",
                           borderBottom: "6px solid transparent",
-                          borderRight: "7px solid var(--border)",
+                          borderLeft: "7px solid var(--border)",
                         }}
                       />
                       <span
                         className="absolute"
                         style={{
-                          left: -5,
+                          right: -5,
                           top: "50%",
                           transform: "translateY(-50%)",
                           width: 0,
                           height: 0,
                           borderTop: "5px solid transparent",
                           borderBottom: "5px solid transparent",
-                          borderRight: "6px solid var(--background)",
+                          borderLeft: "6px solid var(--background)",
                         }}
                       />
                       <p
@@ -348,7 +322,7 @@ export default function JornadaPage() {
 
         {/* Bottom Navigation */}
         <div
-          className="flex-shrink-0 flex items-center justify-between px-2 pt-3 pb-8 bg-background"
+          className="flex-shrink-0 flex items-center justify-between px-6 pt-3 pb-8 bg-background"
           style={{ borderTop: "1px solid var(--border)" }}
         >
           {NAV.map(({ id, Icon, label }) => {
