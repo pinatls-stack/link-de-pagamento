@@ -121,7 +121,7 @@ function MonthSection({
   const progressPath  = progressCount >= 2 ? buildPath(centers.slice(0, progressCount)) : "";
 
   return (
-    <div data-month={dataMonth}>
+    <div data-month={dataMonth} style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}>
       {/* Banner */}
       <div
         className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between"
@@ -384,8 +384,8 @@ export default function JornadaPage() {
         {/* Scroll vertical — 3 meses empilhados */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto scrollbar-hide"
-          style={{ minHeight: 0 }}
+          className="flex-1 overflow-y-scroll scrollbar-hide"
+          style={{ minHeight: 0, scrollSnapType: "y mandatory", overscrollBehaviorY: "none" }}
         >
           <MonthSection
             month="Maio de 2026"
