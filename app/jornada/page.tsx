@@ -12,10 +12,12 @@ import {
   Library,
   FilePlus,
   MessageCircle,
+  Video,
   MoreHorizontal,
   Signal,
   Wifi,
   Battery,
+  ChevronRight,
 } from "lucide-react";
 
 // ── Ilustrações decorativas ───────────────────────────────────────────────────
@@ -28,6 +30,9 @@ const imgMaioIlustracao =
 // Julho — lado esquerdo (node 558:31)
 const imgJulhoIlustracao =
   "https://www.figma.com/api/mcp/asset/90de4604-4562-4773-9eb1-c0b928d246eb";
+// Cláudia — tela de contato (node 898:42)
+const imgClaudia =
+  "https://www.figma.com/api/mcp/asset/bc26d997-fb16-45af-9eca-fa37f20b0194";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -309,6 +314,92 @@ const NAV = [
   { id: "mais",     Icon: MoreHorizontal, label: "Mais"     },
 ];
 
+// ── ClaudiaScreen ─────────────────────────────────────────────────────────────
+
+function ClaudiaScreen() {
+  return (
+    <div className="flex-1 flex flex-col px-6" style={{ minHeight: 0 }}>
+      {/* Cabeçalho */}
+      <div className="pt-6 pb-2">
+        <p
+          className="text-[11px] font-semibold uppercase tracking-widest"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          Assistente
+        </p>
+        <h1 className="text-[22px] font-semibold mt-0.5" style={{ color: "var(--foreground)" }}>
+          Cláudia
+        </h1>
+      </div>
+
+      {/* Ilustração */}
+      <div className="flex justify-center items-center py-8">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imgClaudia}
+          alt="Cláudia, assistente virtual"
+          style={{ width: 220, height: "auto" }}
+        />
+      </div>
+
+      {/* Pergunta */}
+      <div className="text-center mb-8">
+        <p className="text-[17px] font-semibold" style={{ color: "var(--foreground)" }}>
+          Como prefere falar comigo?
+        </p>
+        <p className="text-[13px] mt-1" style={{ color: "var(--muted-foreground)" }}>
+          Escolha o canal de atendimento
+        </p>
+      </div>
+
+      {/* Opções */}
+      <div className="flex flex-col gap-3">
+        <button
+          className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
+          style={{ border: "1px solid var(--border)", background: "var(--background)" }}
+        >
+          <div
+            className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: "var(--purple-100)" }}
+          >
+            <MessageCircle size={20} style={{ color: "var(--primary)" }} />
+          </div>
+          <div className="flex flex-col flex-1">
+            <span className="text-[15px] font-semibold" style={{ color: "var(--foreground)" }}>
+              Mensagem de texto
+            </span>
+            <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
+              Envie uma mensagem agora
+            </span>
+          </div>
+          <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
+        </button>
+
+        <button
+          className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
+          style={{ border: "1px solid var(--border)", background: "var(--background)" }}
+        >
+          <div
+            className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: "var(--purple-100)" }}
+          >
+            <Video size={20} style={{ color: "var(--primary)" }} />
+          </div>
+          <div className="flex flex-col flex-1">
+            <span className="text-[15px] font-semibold" style={{ color: "var(--foreground)" }}>
+              Videochamada
+            </span>
+            <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
+              Fale ao vivo com a Cláudia
+            </span>
+          </div>
+          <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function JornadaPage() {
@@ -347,30 +438,34 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Scroll vertical — 3 meses empilhados */}
-        <div
-          ref={scrollRef}
-          className="flex-1 overflow-y-scroll scrollbar-hide"
-          style={{ minHeight: 0, scrollSnapType: "y mandatory", overscrollBehaviorY: "none" }}
-        >
-          <MonthSection
-            month="Maio de 2026"
-            statuses={MAY_STATUSES}
-            showLeftIllustration
-          />
-          <MonthSection
-            month="Junho de 2026"
-            statuses={JUN_STATUSES}
-            showIllustration
-            data-month="junho-2026"
-          />
-          <MonthSection
-            month="Julho de 2026"
-            statuses={JUL_STATUSES}
-            showLeftIllustration
-            leftIllustrationSrc={imgJulhoIlustracao}
-          />
-        </div>
+        {/* Conteúdo principal */}
+        {activeTab === "claudia" ? (
+          <ClaudiaScreen />
+        ) : (
+          <div
+            ref={scrollRef}
+            className="flex-1 overflow-y-scroll scrollbar-hide"
+            style={{ minHeight: 0, scrollSnapType: "y mandatory", overscrollBehaviorY: "none" }}
+          >
+            <MonthSection
+              month="Maio de 2026"
+              statuses={MAY_STATUSES}
+              showLeftIllustration
+            />
+            <MonthSection
+              month="Junho de 2026"
+              statuses={JUN_STATUSES}
+              showIllustration
+              data-month="junho-2026"
+            />
+            <MonthSection
+              month="Julho de 2026"
+              statuses={JUL_STATUSES}
+              showLeftIllustration
+              leftIllustrationSrc={imgJulhoIlustracao}
+            />
+          </div>
+        )}
 
         {/* Bottom Navigation */}
         <div
