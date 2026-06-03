@@ -98,6 +98,7 @@ function MonthSection({
   showIllustration,
   showLeftIllustration,
   leftIllustrationSrc,
+  sectionHeight,
   "data-month": dataMonth,
 }: {
   month: string;
@@ -105,13 +106,18 @@ function MonthSection({
   showIllustration?: boolean;
   showLeftIllustration?: boolean;
   leftIllustrationSrc?: string;
+  sectionHeight?: number;
   "data-month"?: string;
 }) {
   return (
     <div
       data-month={dataMonth}
-      className="flex flex-col"
-      style={{ scrollSnapAlign: "start", scrollSnapStop: "always", height: "100%" }}
+      className="flex flex-col flex-shrink-0"
+      style={{
+        scrollSnapAlign: "start",
+        scrollSnapStop: "always",
+        height: sectionHeight ? `${sectionHeight}px` : "100%",
+      }}
     >
       {/* Banner */}
       <div
@@ -405,16 +411,23 @@ function ClaudiaScreen() {
 export default function JornadaPage() {
   const [activeTab, setActiveTab] = useState("inicio");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [sectionHeight, setSectionHeight] = useState(0);
 
-  // Posiciona o scroll em Junho de 2026 no carregamento inicial
+  // 1. Mede a altura real do container assim que o DOM estiver pronto
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-    const june = container.querySelector("[data-month='junho-2026']") as HTMLElement | null;
-    if (june) {
-      container.scrollTop = june.offsetTop;
-    }
+    setSectionHeight(container.clientHeight);
   }, []);
+
+  // 2. Só rola para Junho depois que as seções têm a altura correta
+  useEffect(() => {
+    if (!sectionHeight) return;
+    const container = scrollRef.current;
+    if (!container) return;
+    const june = container.querySelector("[data-month='junho-2026']") as HTMLElement | null;
+    if (june) container.scrollTop = june.offsetTop;
+  }, [sectionHeight]);
 
   return (
     <div
@@ -451,11 +464,13 @@ export default function JornadaPage() {
               month="Maio de 2026"
               statuses={MAY_STATUSES}
               showLeftIllustration
+              sectionHeight={sectionHeight}
             />
             <MonthSection
               month="Junho de 2026"
               statuses={JUN_STATUSES}
               showIllustration
+              sectionHeight={sectionHeight}
               data-month="junho-2026"
             />
             <MonthSection
@@ -463,6 +478,7 @@ export default function JornadaPage() {
               statuses={JUL_STATUSES}
               showLeftIllustration
               leftIllustrationSrc={imgJulhoIlustracao}
+              sectionHeight={sectionHeight}
             />
           </div>
         )}
