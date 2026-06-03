@@ -9,9 +9,9 @@ import {
   ClipboardList,
   Lock,
   Home,
-  History,
+  Library,
   FilePlus,
-  Bot,
+  MessageCircle,
   MoreHorizontal,
   Signal,
   Wifi,
@@ -336,11 +336,11 @@ const JUL_STATUSES: NodeStatus[] = [
 // ── Bottom nav ────────────────────────────────────────────────────────────────
 
 const NAV = [
-  { id: "inicio",    Icon: Home,           label: "Início"    },
-  { id: "historico", Icon: History,        label: "Histórico" },
-  { id: "nota",      Icon: FilePlus,       label: "Emissão"   },
-  { id: "agentes",   Icon: Bot,            label: "Agentes"   },
-  { id: "mais",      Icon: MoreHorizontal, label: "Mais"      },
+  { id: "inicio",   Icon: Home,           label: "Início"   },
+  { id: "recursos", Icon: Library,        label: "Recursos" },
+  { id: "nota",     Icon: FilePlus,       label: "Emissão"  },
+  { id: "claudia",  Icon: MessageCircle,  label: "Cláudia"  },
+  { id: "mais",     Icon: MoreHorizontal, label: "Mais"     },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
