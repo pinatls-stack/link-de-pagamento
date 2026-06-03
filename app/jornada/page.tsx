@@ -25,6 +25,9 @@ const imgIlustracao =
 // Maio — lado esquerdo (node 558:13)
 const imgMaioIlustracao =
   "https://www.figma.com/api/mcp/asset/24dc4bf6-9e09-4e8f-9c0d-715f03e7d7ed";
+// Julho — lado esquerdo (node 558:31)
+const imgJulhoIlustracao =
+  "https://www.figma.com/api/mcp/asset/90de4604-4562-4773-9eb1-c0b928d246eb";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -109,12 +112,14 @@ function MonthSection({
   statuses,
   showIllustration,
   showLeftIllustration,
+  leftIllustrationSrc,
   "data-month": dataMonth,
 }: {
   month: string;
   statuses: NodeStatus[];
   showIllustration?: boolean;
   showLeftIllustration?: boolean;
+  leftIllustrationSrc?: string;
   "data-month"?: string;
 }) {
   const progressCount = statuses.filter((s) => s !== "locked").length;
@@ -190,11 +195,11 @@ function MonthSection({
           />
         )}
 
-        {/* Ilustração esquerda (Maio) */}
+        {/* Ilustração esquerda (Maio / Julho) */}
         {showLeftIllustration && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={imgMaioIlustracao}
+            src={leftIllustrationSrc ?? imgMaioIlustracao}
             alt=""
             aria-hidden="true"
             style={{
@@ -401,6 +406,8 @@ export default function JornadaPage() {
           <MonthSection
             month="Julho de 2026"
             statuses={JUL_STATUSES}
+            showLeftIllustration
+            leftIllustrationSrc={imgJulhoIlustracao}
           />
         </div>
 
