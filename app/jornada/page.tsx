@@ -18,6 +18,9 @@ import {
   Battery,
 } from "lucide-react";
 
+// ── Ilustração decorativa (Figma Core Components 3.0 · node 558:16) ─────────
+const imgIlustracao = "https://www.figma.com/api/mcp/asset/1f252e99-6795-44c1-920b-09791d9b438a";
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type NodeStatus = "completed" | "active" | "locked";
@@ -185,6 +188,22 @@ export default function JornadaPage() {
                 strokeLinecap="round"
               />
             </svg>
+
+            {/* Ilustração decorativa — lado direito, espaço livre entre nós 3 e 5 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imgIlustracao}
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                right: 24,
+                top: 415,
+                width: 96,
+                height: 96,
+                objectFit: "contain",
+              }}
+            />
 
             {/* Nodes */}
             {NODES.map((node) => {
