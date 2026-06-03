@@ -85,6 +85,21 @@ const NODE_TEMPLATES: NodeTemplate[] = [
 const NODE_SIZE = 64;
 const COMPANY   = "Lumina Gestão";
 
+// ── Confetti ──────────────────────────────────────────────────────────────────
+
+const CONFETTI_PIECES = [
+  { x: 16,  y: 148, w: 8,  h: 5,  color: "var(--primary)",  rot: 15,  dur: 3.4, delay: 0.0 },
+  { x: 52,  y: 122, w: 6,  h: 9,  color: "var(--success)",  rot: -30, dur: 4.0, delay: 0.5 },
+  { x: 88,  y: 162, w: 10, h: 5,  color: "var(--chart-4)",  rot: 50,  dur: 3.1, delay: 1.0 },
+  { x: 34,  y: 195, w: 7,  h: 7,  color: "var(--chart-2)",  rot: -18, dur: 3.7, delay: 0.3 },
+  { x: 110, y: 138, w: 6,  h: 8,  color: "var(--primary)",  rot: 65,  dur: 2.9, delay: 0.8 },
+  { x: 70,  y: 218, w: 9,  h: 5,  color: "var(--chart-5)",  rot: -42, dur: 4.2, delay: 1.3 },
+  { x: 24,  y: 252, w: 7,  h: 10, color: "var(--success)",  rot: 28,  dur: 3.5, delay: 0.6 },
+  { x: 98,  y: 200, w: 8,  h: 6,  color: "var(--chart-4)",  rot: -22, dur: 3.0, delay: 1.1 },
+  { x: 56,  y: 278, w: 6,  h: 6,  color: "var(--chart-1)",  rot: 55,  dur: 3.8, delay: 0.2 },
+  { x: 118, y: 240, w: 9,  h: 5,  color: "var(--primary)",  rot: -38, dur: 3.2, delay: 0.9 },
+];
+
 // ── MonthSection ──────────────────────────────────────────────────────────────
 
 function MonthSection({
@@ -93,6 +108,7 @@ function MonthSection({
   showIllustration,
   showLeftIllustration,
   leftIllustrationSrc,
+  showConfetti,
   "data-month": dataMonth,
 }: {
   month: string;
@@ -100,6 +116,7 @@ function MonthSection({
   showIllustration?: boolean;
   showLeftIllustration?: boolean;
   leftIllustrationSrc?: string;
+  showConfetti?: boolean;
   "data-month"?: string;
 }) {
   return (
@@ -172,6 +189,25 @@ function MonthSection({
             }}
           />
         )}
+
+        {/* Confetti animado (Maio) */}
+        {showConfetti && CONFETTI_PIECES.map((p, i) => (
+          <div
+            key={i}
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: p.x,
+              top: p.y,
+              width: p.w,
+              height: p.h,
+              background: p.color,
+              borderRadius: 2,
+              transform: `rotate(${p.rot}deg)`,
+              animation: `confetti-drift ${p.dur}s ${p.delay}s ease-in-out infinite`,
+            }}
+          />
+        ))}
 
         {/* Nodes */}
         {NODE_TEMPLATES.map((node, idx) => {
@@ -357,6 +393,7 @@ export default function JornadaPage() {
             month="Maio de 2026"
             statuses={MAY_STATUSES}
             showLeftIllustration
+            showConfetti
           />
           <MonthSection
             month="Junho de 2026"

@@ -184,3 +184,11 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+@keyframes confetti-drift {
+  0%   { transform: translateY(0px)   translateX(0px)  rotate(0deg);   opacity: 0.9; }
+  20%  { transform: translateY(-10px) translateX(5px)  rotate(12deg);  opacity: 1;   }
+  45%  { transform: translateY(-5px)  translateX(-4px) rotate(-8deg);  opacity: 0.85;}
+  70%  { transform: translateY(-16px) translateX(3px)  rotate(18deg);  opacity: 1;   }
+  100% { transform: translateY(0px)   translateX(0px)  rotate(0deg);   opacity: 0.9; }
+}
