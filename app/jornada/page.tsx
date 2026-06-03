@@ -83,7 +83,7 @@ const NODE_TEMPLATES: NodeTemplate[] = [
     label: "Pós-mês",
     description: "Revisar relatório e tirar dúvidas",
     Icon: ClipboardList,
-    x: 62, y: 488,
+    x: 62, y: 480,
   },
 ];
 
@@ -159,7 +159,7 @@ function MonthSection({
             style={{
               position: "absolute",
               right: 24,
-              top: 461,
+              top: 453,
               width: 116,
               height: 116,
               objectFit: "contain",
