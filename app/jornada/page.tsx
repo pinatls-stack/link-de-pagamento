@@ -18,9 +18,13 @@ import {
   Battery,
 } from "lucide-react";
 
-// ── Ilustração decorativa ─────────────────────────────────────────────────────
+// ── Ilustrações decorativas ───────────────────────────────────────────────────
+// Junho — lado direito (node 558:16)
 const imgIlustracao =
   "https://www.figma.com/api/mcp/asset/1f252e99-6795-44c1-920b-09791d9b438a";
+// Maio — lado esquerdo (node 558:13)
+const imgMaioIlustracao =
+  "https://www.figma.com/api/mcp/asset/24dc4bf6-9e09-4e8f-9c0d-715f03e7d7ed";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -104,11 +108,13 @@ function MonthSection({
   month,
   statuses,
   showIllustration,
+  showLeftIllustration,
   "data-month": dataMonth,
 }: {
   month: string;
   statuses: NodeStatus[];
   showIllustration?: boolean;
+  showLeftIllustration?: boolean;
   "data-month"?: string;
 }) {
   const progressCount = statuses.filter((s) => s !== "locked").length;
@@ -166,7 +172,7 @@ function MonthSection({
           )}
         </svg>
 
-        {/* Ilustração (apenas no mês atual) */}
+        {/* Ilustração direita (Junho) */}
         {showIllustration && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -179,6 +185,24 @@ function MonthSection({
               top: 484,
               width: 116,
               height: 116,
+              objectFit: "contain",
+            }}
+          />
+        )}
+
+        {/* Ilustração esquerda (Maio) */}
+        {showLeftIllustration && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imgMaioIlustracao}
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: 24,
+              top: 265,
+              width: 112,
+              height: 112,
               objectFit: "contain",
             }}
           />
@@ -366,6 +390,7 @@ export default function JornadaPage() {
           <MonthSection
             month="Maio de 2026"
             statuses={MAY_STATUSES}
+            showLeftIllustration
           />
           <MonthSection
             month="Junho de 2026"
