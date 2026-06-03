@@ -2,14 +2,11 @@
 
 import { useState } from "react";
 import {
-  QrCode,
-  Link2,
-  Palette,
-  Share2,
+  FileText,
+  Building2,
+  EyeOff,
   DollarSign,
-  Check,
-  BarChart2,
-  Trophy,
+  ClipboardList,
   Lock,
   Flame,
   Gem,
@@ -19,7 +16,6 @@ import {
   Award,
   User,
   MoreHorizontal,
-  FileText,
   Signal,
   Wifi,
   Battery,
@@ -32,6 +28,7 @@ type NodeStatus = "completed" | "active" | "locked";
 interface StepNode {
   id: number;
   label: string;
+  description: string;
   Icon: React.ComponentType<{ size?: number; className?: string }>;
   status: NodeStatus;
   x: number;
@@ -41,14 +38,46 @@ interface StepNode {
 // ── Track data — winding snake pattern within 390px ──────────────────────────
 
 const NODES: StepNode[] = [
-  { id: 1, label: "Chave Pix",    Icon: QrCode,      status: "completed", x: 163, y: 20  },
-  { id: 2, label: "Criar link",   Icon: Link2,       status: "completed", x: 248, y: 108 },
-  { id: 3, label: "Personalizar", Icon: Palette,     status: "completed", x: 268, y: 196 },
-  { id: 4, label: "Compartilhar", Icon: Share2,      status: "active",    x: 192, y: 284 },
-  { id: 5, label: "Cobrança",     Icon: DollarSign,  status: "locked",    x: 100, y: 372 },
-  { id: 6, label: "Receber",      Icon: Check,       status: "locked",    x: 68,  y: 460 },
-  { id: 7, label: "Relatório",    Icon: BarChart2,   status: "locked",    x: 148, y: 548 },
-  { id: 8, label: "Meta!",        Icon: Trophy,      status: "locked",    x: 248, y: 636 },
+  {
+    id: 1,
+    label: "Último dia útil",
+    description: "NFS-e + pró-labore",
+    Icon: FileText,
+    status: "completed",
+    x: 163, y: 40,
+  },
+  {
+    id: 2,
+    label: "Dia 5",
+    description: "Extrato bancário (prazo: dia 8)",
+    Icon: Building2,
+    status: "active",
+    x: 262, y: 150,
+  },
+  {
+    id: 3,
+    label: "Dia 15",
+    description: "eSocial (automático)",
+    Icon: EyeOff,
+    status: "locked",
+    x: 272, y: 270,
+  },
+  {
+    id: 4,
+    label: "Dia 20",
+    description: "DAS + DARF INSS + DARF IRRF",
+    Icon: DollarSign,
+    status: "locked",
+    x: 162, y: 390,
+  },
+  {
+    id: 5,
+    label: "Pós-mês",
+    description: "Revisar relatório e tirar dúvidas",
+    Icon: ClipboardList,
+    status: "locked",
+    x: 62, y: 510,
+  },
 ];
 
 // ── SVG path builder (cubic bezier S-curves) ─────────────────────────────────
@@ -157,14 +186,14 @@ export default function JornadaPage() {
 
         {/* Scrollable Track */}
         <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ minHeight: 0 }}>
-          <div className="relative" style={{ width: 390, height: 780 }}>
+          <div className="relative" style={{ width: 390, height: 660 }}>
 
             {/* SVG winding path */}
             <svg
               className="absolute inset-0 pointer-events-none"
               width={390}
-              height={780}
-              viewBox="0 0 390 780"
+              height={660}
+              viewBox="0 0 390 660"
               fill="none"
             >
               {/* Background (locked) path */}
@@ -185,7 +214,7 @@ export default function JornadaPage() {
 
             {/* Nodes */}
             {NODES.map((node) => {
-              const { Icon, status, label } = node;
+              const { Icon, status, label, description } = node;
               const done   = status === "completed";
               const active = status === "active";
               const locked = status === "locked";
@@ -195,17 +224,17 @@ export default function JornadaPage() {
                   key={node.id}
                   style={{ position: "absolute", left: node.x, top: node.y }}
                 >
-                  {/* "COMEÇAR" tooltip (active only) */}
+                  {/* Tooltip da atividade (nó ativo) */}
                   {active && (
                     <div
-                      className="absolute whitespace-nowrap rounded-xl text-[13px] font-bold uppercase tracking-wide bg-background"
+                      className="absolute rounded-xl bg-background"
                       style={{
-                        top: 14,
-                        left: NODE_SIZE + 8,
-                        padding: "6px 14px",
-                        color: "var(--primary)",
+                        top: 8,
+                        left: NODE_SIZE + 10,
+                        padding: "8px 12px",
                         border: "1px solid var(--border)",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        maxWidth: 130,
                       }}
                     >
                       {/* Arrow caret */}
@@ -235,7 +264,18 @@ export default function JornadaPage() {
                           borderRight: "6px solid var(--background)",
                         }}
                       />
-                      Começar
+                      <p
+                        className="text-[11px] font-bold uppercase tracking-wide"
+                        style={{ color: "var(--primary)" }}
+                      >
+                        Fazer agora
+                      </p>
+                      <p
+                        className="text-[11px] font-medium mt-0.5 leading-tight"
+                        style={{ color: "var(--muted-foreground)" }}
+                      >
+                        {description}
+                      </p>
                     </div>
                   )}
 
