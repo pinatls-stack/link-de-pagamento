@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   FileText,
   Building2,
@@ -18,32 +18,31 @@ import {
   Battery,
 } from "lucide-react";
 
-// ── Ilustração decorativa (Figma Core Components 3.0 · node 558:16) ─────────
-const imgIlustracao = "https://www.figma.com/api/mcp/asset/1f252e99-6795-44c1-920b-09791d9b438a";
+// ── Ilustração decorativa ─────────────────────────────────────────────────────
+const imgIlustracao =
+  "https://www.figma.com/api/mcp/asset/1f252e99-6795-44c1-920b-09791d9b438a";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 type NodeStatus = "completed" | "active" | "locked";
 
-interface StepNode {
+interface NodeTemplate {
   id: number;
   label: string;
   description: string;
   Icon: React.ComponentType<{ size?: number; className?: string }>;
-  status: NodeStatus;
   x: number;
   y: number;
 }
 
-// ── Track data — winding snake pattern within 390px ──────────────────────────
+// ── Atividades mensais (mesmas para todos os meses) ───────────────────────────
 
-const NODES: StepNode[] = [
+const NODE_TEMPLATES: NodeTemplate[] = [
   {
     id: 1,
     label: "Último dia útil",
     description: "NFS-e + pró-labore",
     Icon: FileText,
-    status: "completed",
     x: 163, y: 40,
   },
   {
@@ -51,7 +50,6 @@ const NODES: StepNode[] = [
     label: "Dia 5",
     description: "Extrato bancário (prazo: dia 8)",
     Icon: Building2,
-    status: "active",
     x: 262, y: 150,
   },
   {
@@ -59,7 +57,6 @@ const NODES: StepNode[] = [
     label: "Dia 15",
     description: "eSocial (automático)",
     Icon: EyeOff,
-    status: "locked",
     x: 272, y: 270,
   },
   {
@@ -67,7 +64,6 @@ const NODES: StepNode[] = [
     label: "Dia 20",
     description: "DAS + DARF INSS + DARF IRRF",
     Icon: DollarSign,
-    status: "locked",
     x: 162, y: 390,
   },
   {
@@ -75,30 +71,243 @@ const NODES: StepNode[] = [
     label: "Pós-mês",
     description: "Revisar relatório e tirar dúvidas",
     Icon: ClipboardList,
-    status: "locked",
     x: 62, y: 510,
   },
 ];
 
-// ── SVG path builder (cubic bezier S-curves) ─────────────────────────────────
+const NODE_SIZE = 64;
+const COMPANY   = "Lumina Gestão";
+
+// ── SVG path builder ──────────────────────────────────────────────────────────
+
+const centers = NODE_TEMPLATES.map((n) => ({
+  x: n.x + NODE_SIZE / 2,
+  y: n.y + NODE_SIZE / 2,
+}));
 
 function buildPath(pts: { x: number; y: number }[]): string {
   if (pts.length < 2) return "";
   let d = `M ${pts[0].x} ${pts[0].y}`;
   for (let i = 1; i < pts.length; i++) {
-    const p = pts[i - 1];
-    const c = pts[i];
+    const p = pts[i - 1], c = pts[i];
     const my = (p.y + c.y) / 2;
     d += ` C ${p.x} ${my}, ${c.x} ${my}, ${c.x} ${c.y}`;
   }
   return d;
 }
 
-const NODE_SIZE = 64;
-const centers = NODES.map((n) => ({ x: n.x + NODE_SIZE / 2, y: n.y + NODE_SIZE / 2 }));
-const progressCount = NODES.filter((n) => n.status !== "locked").length;
-const fullPath     = buildPath(centers);
-const progressPath = buildPath(centers.slice(0, progressCount));
+const fullPath = buildPath(centers);
+
+// ── MonthSection ──────────────────────────────────────────────────────────────
+
+function MonthSection({
+  month,
+  statuses,
+  showIllustration,
+  "data-month": dataMonth,
+}: {
+  month: string;
+  statuses: NodeStatus[];
+  showIllustration?: boolean;
+  "data-month"?: string;
+}) {
+  const progressCount = statuses.filter((s) => s !== "locked").length;
+  const progressPath  = progressCount >= 2 ? buildPath(centers.slice(0, progressCount)) : "";
+
+  return (
+    <div data-month={dataMonth}>
+      {/* Banner */}
+      <div
+        className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between"
+        style={{ background: "var(--primary)" }}
+      >
+        <div>
+          <p
+            className="text-[11px] font-semibold uppercase tracking-widest"
+            style={{ color: "rgba(255,255,255,0.65)" }}
+          >
+            {COMPANY}
+          </p>
+          <p className="text-[17px] font-semibold text-primary-foreground mt-0.5">
+            {month}
+          </p>
+        </div>
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+          style={{ background: "rgba(255,255,255,0.18)" }}
+        >
+          <FileText size={18} className="text-primary-foreground" />
+        </div>
+      </div>
+
+      {/* Track */}
+      <div className="relative" style={{ width: 390, height: 660 }}>
+        {/* Winding path */}
+        <svg
+          className="absolute inset-0 pointer-events-none"
+          width={390}
+          height={660}
+          viewBox="0 0 390 660"
+          fill="none"
+        >
+          <path
+            d={fullPath}
+            stroke="var(--border)"
+            strokeWidth={10}
+            strokeLinecap="round"
+          />
+          {progressPath && (
+            <path
+              d={progressPath}
+              stroke="var(--success)"
+              strokeWidth={10}
+              strokeLinecap="round"
+            />
+          )}
+        </svg>
+
+        {/* Ilustração (apenas no mês atual) */}
+        {showIllustration && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imgIlustracao}
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              right: 24,
+              top: 484,
+              width: 116,
+              height: 116,
+              objectFit: "contain",
+            }}
+          />
+        )}
+
+        {/* Nodes */}
+        {NODE_TEMPLATES.map((node, idx) => {
+          const status = statuses[idx];
+          const done   = status === "completed";
+          const active = status === "active";
+          const locked = status === "locked";
+          const { Icon } = node;
+
+          return (
+            <div
+              key={node.id}
+              style={{ position: "absolute", left: node.x, top: node.y }}
+            >
+              {/* Tooltip "Fazer agora" (nó ativo) */}
+              {active && (
+                <div
+                  className="absolute rounded-xl bg-background"
+                  style={{
+                    top: 8,
+                    right: NODE_SIZE + 10,
+                    padding: "8px 12px",
+                    border: "1px solid var(--border)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    width: 140,
+                  }}
+                >
+                  <span
+                    className="absolute"
+                    style={{
+                      right: -7, top: "50%", transform: "translateY(-50%)",
+                      width: 0, height: 0,
+                      borderTop: "6px solid transparent",
+                      borderBottom: "6px solid transparent",
+                      borderLeft: "7px solid var(--border)",
+                    }}
+                  />
+                  <span
+                    className="absolute"
+                    style={{
+                      right: -5, top: "50%", transform: "translateY(-50%)",
+                      width: 0, height: 0,
+                      borderTop: "5px solid transparent",
+                      borderBottom: "5px solid transparent",
+                      borderLeft: "6px solid var(--background)",
+                    }}
+                  />
+                  <p
+                    className="text-[11px] font-bold uppercase tracking-wide"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    Fazer agora
+                  </p>
+                  <p
+                    className="text-[11px] font-medium mt-0.5 leading-tight"
+                    style={{ color: "var(--muted-foreground)" }}
+                  >
+                    {node.description}
+                  </p>
+                </div>
+              )}
+
+              {/* Círculo */}
+              <div
+                className="flex items-center justify-center rounded-full"
+                style={{
+                  width: NODE_SIZE,
+                  height: NODE_SIZE,
+                  ...(done
+                    ? {
+                        background: "var(--success)",
+                        color: "#fff",
+                        boxShadow: "0 5px 0 #076e49, 0 7px 14px rgba(10,155,102,0.25)",
+                      }
+                    : active
+                    ? {
+                        background: "var(--primary)",
+                        color: "var(--primary-foreground)",
+                        boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
+                      }
+                    : {
+                        background: "var(--muted)",
+                        color: "var(--muted-foreground)",
+                        border: "2px solid var(--border)",
+                      }),
+                }}
+              >
+                {locked ? <Lock size={22} /> : <Icon size={22} />}
+              </div>
+
+              {/* Label */}
+              <p
+                className="absolute whitespace-nowrap text-[11px] font-medium text-center"
+                style={{
+                  top: NODE_SIZE + 8,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  color: locked
+                    ? "var(--muted-foreground)"
+                    : active
+                    ? "var(--primary)"
+                    : "var(--foreground)",
+                }}
+              >
+                {node.label}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Status por mês ────────────────────────────────────────────────────────────
+
+const MAY_STATUSES: NodeStatus[] = [
+  "completed", "completed", "completed", "completed", "completed",
+];
+const JUN_STATUSES: NodeStatus[] = [
+  "completed", "active", "locked", "locked", "locked",
+];
+const JUL_STATUSES: NodeStatus[] = [
+  "locked", "locked", "locked", "locked", "locked",
+];
 
 // ── Bottom nav ────────────────────────────────────────────────────────────────
 
@@ -114,6 +323,17 @@ const NAV = [
 
 export default function JornadaPage() {
   const [activeTab, setActiveTab] = useState("inicio");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Posiciona o scroll em Junho de 2026 no carregamento inicial
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const june = container.querySelector("[data-month='junho-2026']") as HTMLElement | null;
+    if (june) {
+      container.scrollTop = june.offsetTop;
+    }
+  }, []);
 
   return (
     <div
@@ -137,206 +357,26 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Section Banner */}
+        {/* Scroll vertical — 3 meses empilhados */}
         <div
-          className="mx-6 mt-3 rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0"
-          style={{ background: "var(--primary)" }}
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto scrollbar-hide"
+          style={{ minHeight: 0 }}
         >
-          <div>
-            <p
-              className="text-[11px] font-semibold uppercase tracking-widest"
-              style={{ color: "rgba(255,255,255,0.65)" }}
-            >
-              Lumina Gestão
-            </p>
-            <p className="text-[17px] font-semibold text-primary-foreground mt-0.5">
-              Junho de 2026
-            </p>
-          </div>
-          <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.18)" }}
-          >
-            <FileText size={18} className="text-primary-foreground" />
-          </div>
-        </div>
-
-        {/* Scrollable Track */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ minHeight: 0 }}>
-          <div className="relative" style={{ width: 390, height: 660 }}>
-
-            {/* SVG winding path */}
-            <svg
-              className="absolute inset-0 pointer-events-none"
-              width={390}
-              height={660}
-              viewBox="0 0 390 660"
-              fill="none"
-            >
-              {/* Background (locked) path */}
-              <path
-                d={fullPath}
-                stroke="var(--border)"
-                strokeWidth={10}
-                strokeLinecap="round"
-              />
-              {/* Progress (completed + active) path */}
-              <path
-                d={progressPath}
-                stroke="var(--success)"
-                strokeWidth={10}
-                strokeLinecap="round"
-              />
-            </svg>
-
-            {/* Ilustração decorativa — lado direito, espaço livre entre nós 3 e 5 */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={imgIlustracao}
-              alt=""
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                right: 24,
-                top: 484,
-                width: 116,
-                height: 116,
-                objectFit: "contain",
-              }}
-            />
-
-            {/* Nodes */}
-            {NODES.map((node) => {
-              const { Icon, status, label, description } = node;
-              const done   = status === "completed";
-              const active = status === "active";
-              const locked = status === "locked";
-
-              return (
-                <div
-                  key={node.id}
-                  style={{ position: "absolute", left: node.x, top: node.y }}
-                >
-                  {/* Tooltip da atividade (nó ativo) — posicionado à esquerda */}
-                  {active && (
-                    <div
-                      className="absolute rounded-xl bg-background"
-                      style={{
-                        top: 8,
-                        right: NODE_SIZE + 10,
-                        padding: "8px 12px",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                        width: 140,
-                      }}
-                    >
-                      {/* Seta apontando para a direita (em direção ao nó) */}
-                      <span
-                        className="absolute"
-                        style={{
-                          right: -7,
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          width: 0,
-                          height: 0,
-                          borderTop: "6px solid transparent",
-                          borderBottom: "6px solid transparent",
-                          borderLeft: "7px solid var(--border)",
-                        }}
-                      />
-                      <span
-                        className="absolute"
-                        style={{
-                          right: -5,
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          width: 0,
-                          height: 0,
-                          borderTop: "5px solid transparent",
-                          borderBottom: "5px solid transparent",
-                          borderLeft: "6px solid var(--background)",
-                        }}
-                      />
-                      <p
-                        className="text-[11px] font-bold uppercase tracking-wide"
-                        style={{ color: "var(--primary)" }}
-                      >
-                        Fazer agora
-                      </p>
-                      <p
-                        className="text-[11px] font-medium mt-0.5 leading-tight"
-                        style={{ color: "var(--muted-foreground)" }}
-                      >
-                        {description}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Circle */}
-                  <div
-                    className="flex items-center justify-center rounded-full"
-                    style={{
-                      width: NODE_SIZE,
-                      height: NODE_SIZE,
-                      ...(done
-                        ? {
-                            background: "var(--success)",
-                            color: "#fff",
-                            boxShadow: "0 5px 0 #076e49, 0 7px 14px rgba(10,155,102,0.25)",
-                          }
-                        : active
-                        ? {
-                            background: "var(--primary)",
-                            color: "var(--primary-foreground)",
-                            boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
-                          }
-                        : {
-                            background: "var(--muted)",
-                            color: "var(--muted-foreground)",
-                            border: "2px solid var(--border)",
-                          }),
-                    }}
-                  >
-                    {locked ? <Lock size={22} /> : <Icon size={22} />}
-                  </div>
-
-                  {/* Stars (completed only) */}
-                  {done && (
-                    <div
-                      className="absolute flex gap-[3px] justify-center"
-                      style={{ top: NODE_SIZE + 4, left: 0, width: NODE_SIZE }}
-                    >
-                      {[0, 1, 2].map((i) => (
-                        <svg key={i} width="11" height="11" viewBox="0 0 10 10">
-                          <path
-                            d="M5 0L6.12 3.45H9.76L6.82 5.59L7.94 9.04L5 6.9L2.06 9.04L3.18 5.59L0.24 3.45H3.88L5 0Z"
-                            fill="var(--success)"
-                          />
-                        </svg>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Label */}
-                  <p
-                    className="absolute whitespace-nowrap text-[11px] font-medium text-center"
-                    style={{
-                      top: done ? NODE_SIZE + 22 : NODE_SIZE + 8,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      color: locked
-                        ? "var(--muted-foreground)"
-                        : active
-                        ? "var(--primary)"
-                        : "var(--foreground)",
-                    }}
-                  >
-                    {label}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+          <MonthSection
+            month="Maio de 2026"
+            statuses={MAY_STATUSES}
+          />
+          <MonthSection
+            month="Junho de 2026"
+            statuses={JUN_STATUSES}
+            showIllustration
+            data-month="junho-2026"
+          />
+          <MonthSection
+            month="Julho de 2026"
+            statuses={JUL_STATUSES}
+          />
         </div>
 
         {/* Bottom Navigation */}
