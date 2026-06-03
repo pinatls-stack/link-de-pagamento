@@ -325,7 +325,7 @@ function ClaudiaScreen() {
           className="text-[11px] font-semibold uppercase tracking-widest"
           style={{ color: "var(--muted-foreground)" }}
         >
-          Assistente
+          Assistente de contabilidade
         </p>
         <h1 className="text-[22px] font-semibold mt-0.5" style={{ color: "var(--foreground)" }}>
           Cláudia
@@ -333,22 +333,25 @@ function ClaudiaScreen() {
       </div>
 
       {/* Ilustração */}
-      <div className="flex justify-center items-center py-8">
+      <div className="flex justify-center items-center py-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imgClaudia}
-          alt="Cláudia, assistente virtual"
+          alt="Cláudia, assistente de contabilidade"
           style={{ width: 220, height: "auto" }}
         />
       </div>
 
-      {/* Pergunta */}
-      <div className="text-center mb-8">
-        <p className="text-[17px] font-semibold" style={{ color: "var(--foreground)" }}>
-          Como prefere falar comigo?
+      {/* Descrição */}
+      <div
+        className="rounded-2xl px-4 py-4 mb-6"
+        style={{ background: "var(--purple-100)" }}
+      >
+        <p className="text-[14px] font-semibold" style={{ color: "var(--primary)" }}>
+          Tire suas dúvidas de contabilidade
         </p>
-        <p className="text-[13px] mt-1" style={{ color: "var(--muted-foreground)" }}>
-          Escolha o canal de atendimento
+        <p className="text-[13px] mt-1 leading-relaxed" style={{ color: "var(--primary)" }}>
+          Impostos, notas fiscais, pró-labore, DAS, eSocial — a Cláudia responde tudo sobre a rotina contábil da sua empresa.
         </p>
       </div>
 
@@ -369,7 +372,7 @@ function ClaudiaScreen() {
               Mensagem de texto
             </span>
             <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
-              Envie uma mensagem agora
+              Envie sua dúvida por escrito
             </span>
           </div>
           <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
@@ -390,7 +393,7 @@ function ClaudiaScreen() {
               Videochamada
             </span>
             <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
-              Fale ao vivo com a Cláudia
+              Converse ao vivo com a Cláudia
             </span>
           </div>
           <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
