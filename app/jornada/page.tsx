@@ -85,26 +85,6 @@ const NODE_TEMPLATES: NodeTemplate[] = [
 const NODE_SIZE = 64;
 const COMPANY   = "Lumina Gestão";
 
-// ── SVG path builder ──────────────────────────────────────────────────────────
-
-const centers = NODE_TEMPLATES.map((n) => ({
-  x: n.x + NODE_SIZE / 2,
-  y: n.y + NODE_SIZE / 2,
-}));
-
-function buildPath(pts: { x: number; y: number }[]): string {
-  if (pts.length < 2) return "";
-  let d = `M ${pts[0].x} ${pts[0].y}`;
-  for (let i = 1; i < pts.length; i++) {
-    const p = pts[i - 1], c = pts[i];
-    const my = (p.y + c.y) / 2;
-    d += ` C ${p.x} ${my}, ${c.x} ${my}, ${c.x} ${c.y}`;
-  }
-  return d;
-}
-
-const fullPath = buildPath(centers);
-
 // ── MonthSection ──────────────────────────────────────────────────────────────
 
 function MonthSection({
@@ -122,15 +102,15 @@ function MonthSection({
   leftIllustrationSrc?: string;
   "data-month"?: string;
 }) {
-  const progressCount = statuses.filter((s) => s !== "locked").length;
-  const progressPath  = progressCount >= 2 ? buildPath(centers.slice(0, progressCount)) : "";
-
   return (
     <div data-month={dataMonth} style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}>
       {/* Banner */}
       <div
         className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between"
-        style={{ background: "var(--primary)" }}
+        style={{
+          background: "var(--primary)",
+          boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
+        }}
       >
         <div>
           <p
@@ -153,30 +133,6 @@ function MonthSection({
 
       {/* Track */}
       <div className="relative" style={{ width: 390, height: 660 }}>
-        {/* Winding path */}
-        <svg
-          className="absolute inset-0 pointer-events-none"
-          width={390}
-          height={660}
-          viewBox="0 0 390 660"
-          fill="none"
-        >
-          <path
-            d={fullPath}
-            stroke="var(--border)"
-            strokeWidth={10}
-            strokeLinecap="round"
-          />
-          {progressPath && (
-            <path
-              d={progressPath}
-              stroke="var(--success)"
-              strokeWidth={10}
-              strokeLinecap="round"
-            />
-          )}
-        </svg>
-
         {/* Ilustração direita (Junho) */}
         {showIllustration && (
           // eslint-disable-next-line @next/next/no-img-element
