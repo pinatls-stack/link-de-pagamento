@@ -200,9 +200,9 @@ function MonthSection({
             style={{
               position: "absolute",
               left: 24,
-              top: 265,
-              width: 112,
-              height: 112,
+              top: 257,
+              width: 90,
+              height: 90,
               objectFit: "contain",
             }}
           />
