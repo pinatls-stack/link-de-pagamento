@@ -9,9 +9,9 @@ import {
   ClipboardList,
   Lock,
   Home,
-  BookOpen,
-  Award,
-  User,
+  History,
+  FilePlus,
+  Bot,
   MoreHorizontal,
   Signal,
   Wifi,
@@ -100,11 +100,11 @@ const progressPath = buildPath(centers.slice(0, progressCount));
 // ── Bottom nav ────────────────────────────────────────────────────────────────
 
 const NAV = [
-  { id: "inicio",     Icon: Home,           label: "Início"     },
-  { id: "modulos",    Icon: BookOpen,       label: "Módulos"    },
-  { id: "conquistas", Icon: Award,          label: "Conquistas" },
-  { id: "perfil",     Icon: User,           label: "Perfil"     },
-  { id: "mais",       Icon: MoreHorizontal, label: "Mais"       },
+  { id: "inicio",    Icon: Home,           label: "Início"    },
+  { id: "historico", Icon: History,        label: "Histórico" },
+  { id: "nota",      Icon: FilePlus,       label: "Emissão"   },
+  { id: "agentes",   Icon: Bot,            label: "Agentes"   },
+  { id: "mais",      Icon: MoreHorizontal, label: "Mais"      },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
