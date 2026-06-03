@@ -55,40 +55,41 @@ const NODE_TEMPLATES: NodeTemplate[] = [
     label: "Último dia útil",
     description: "NFS-e + pró-labore",
     Icon: FileText,
-    x: 163, y: 35,
+    x: 163, y: 28,
   },
   {
     id: 2,
     label: "Dia 5",
     description: "Extrato bancário (prazo: dia 8)",
     Icon: Building2,
-    x: 262, y: 145,
+    x: 262, y: 138,
   },
   {
     id: 3,
     label: "Dia 15",
     description: "eSocial (automático)",
     Icon: EyeOff,
-    x: 272, y: 265,
+    x: 272, y: 258,
   },
   {
     id: 4,
     label: "Dia 20",
     description: "DAS + DARF INSS + DARF IRRF",
     Icon: DollarSign,
-    x: 162, y: 385,
+    x: 162, y: 378,
   },
   {
     id: 5,
     label: "Pós-mês",
     description: "Revisar relatório e tirar dúvidas",
     Icon: ClipboardList,
-    x: 62, y: 505,
+    x: 62, y: 496,
   },
 ];
 
-const NODE_SIZE = 64;
-const COMPANY   = "Lumina Gestão";
+const NODE_SIZE     = 64;
+const SHADOW_OFFSET = 6;   // profundidade do efeito 3D
+const COMPANY       = "Lumina Gestão";
 
 // ── MonthSection ──────────────────────────────────────────────────────────────
 
@@ -158,7 +159,7 @@ function MonthSection({
             style={{
               position: "absolute",
               right: 24,
-              top: 479,
+              top: 469,
               width: 116,
               height: 116,
               objectFit: "contain",
@@ -176,7 +177,7 @@ function MonthSection({
             style={{
               position: "absolute",
               left: 24,
-              top: 239,
+              top: 229,
               width: 116,
               height: 116,
               objectFit: "contain",
@@ -245,40 +246,50 @@ function MonthSection({
                 </div>
               )}
 
-              {/* Círculo */}
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  width: NODE_SIZE,
-                  height: NODE_SIZE,
-                  borderRadius: "50%",
-                  ...(done
-                    ? {
-                        background: "var(--success)",
-                        color: "#fff",
-                        boxShadow: "0 6px 16px rgba(10,155,102,0.35)",
-                      }
-                    : active
-                    ? {
-                        background: "var(--primary)",
-                        color: "var(--primary-foreground)",
-                        boxShadow: "0 6px 18px rgba(117,55,174,0.4)",
-                      }
-                    : {
-                        background: "var(--muted)",
-                        color: "var(--muted-foreground)",
-                        border: "2px solid var(--border)",
-                      }),
-                }}
-              >
-                {locked ? <Lock size={22} /> : <Icon size={22} />}
+              {/* Botão 3D (estilo Duolingo) */}
+              <div style={{ position: "relative", width: NODE_SIZE, height: NODE_SIZE + SHADOW_OFFSET }}>
+                {/* Camada de sombra — deslocada SHADOW_OFFSET px abaixo */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: SHADOW_OFFSET,
+                    left: 0,
+                    width: NODE_SIZE,
+                    height: NODE_SIZE,
+                    borderRadius: "50%",
+                    background: done
+                      ? "#076e49"
+                      : active
+                      ? "var(--primary-active)"
+                      : "#c8c2d4",
+                  }}
+                />
+                {/* Face principal */}
+                <div
+                  className="flex items-center justify-center"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: NODE_SIZE,
+                    height: NODE_SIZE,
+                    borderRadius: "50%",
+                    ...(done
+                      ? { background: "var(--success)", color: "#fff" }
+                      : active
+                      ? { background: "var(--primary)", color: "var(--primary-foreground)" }
+                      : { background: "var(--muted)", color: "var(--muted-foreground)", border: "2px solid var(--border)" }),
+                  }}
+                >
+                  {locked ? <Lock size={22} /> : <Icon size={22} />}
+                </div>
               </div>
 
               {/* Label */}
               <p
                 className="absolute whitespace-nowrap text-[11px] font-medium text-center"
                 style={{
-                  top: NODE_SIZE + 8,
+                  top: NODE_SIZE + SHADOW_OFFSET + 6,
                   left: "50%",
                   transform: "translateX(-50%)",
                   color: locked
