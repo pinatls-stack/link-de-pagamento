@@ -50,35 +50,35 @@ const NODE_TEMPLATES: NodeTemplate[] = [
     label: "Último dia útil",
     description: "NFS-e + pró-labore",
     Icon: FileText,
-    x: 163, y: 28,
+    x: 163, y: 40,
   },
   {
     id: 2,
     label: "Dia 5",
     description: "Extrato bancário (prazo: dia 8)",
     Icon: Building2,
-    x: 262, y: 118,
+    x: 262, y: 150,
   },
   {
     id: 3,
     label: "Dia 15",
     description: "eSocial (automático)",
     Icon: EyeOff,
-    x: 272, y: 208,
+    x: 272, y: 270,
   },
   {
     id: 4,
     label: "Dia 20",
     description: "DAS + DARF INSS + DARF IRRF",
     Icon: DollarSign,
-    x: 162, y: 298,
+    x: 162, y: 390,
   },
   {
     id: 5,
     label: "Pós-mês",
     description: "Revisar relatório e tirar dúvidas",
     Icon: ClipboardList,
-    x: 62, y: 388,
+    x: 62, y: 510,
   },
 ];
 
@@ -132,7 +132,7 @@ function MonthSection({
       </div>
 
       {/* Track */}
-      <div className="relative" style={{ width: 390, height: 500 }}>
+      <div className="relative" style={{ width: 390, height: 660 }}>
         {/* Ilustração direita (Junho) */}
         {showIllustration && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -143,7 +143,7 @@ function MonthSection({
             style={{
               position: "absolute",
               right: 24,
-              top: 362,
+              top: 484,
               width: 116,
               height: 116,
               objectFit: "contain",
@@ -161,7 +161,7 @@ function MonthSection({
             style={{
               position: "absolute",
               left: 24,
-              top: 182,
+              top: 244,
               width: 116,
               height: 116,
               objectFit: "contain",
