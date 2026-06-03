@@ -325,7 +325,7 @@ function ClaudiaScreen() {
           className="text-[11px] font-semibold uppercase tracking-widest"
           style={{ color: "var(--muted-foreground)" }}
         >
-          Assistente
+          Assistente de contabilidade
         </p>
         <h1 className="text-[22px] font-semibold mt-0.5" style={{ color: "var(--foreground)" }}>
           Cláudia
@@ -348,7 +348,7 @@ function ClaudiaScreen() {
           Como prefere falar comigo?
         </p>
         <p className="text-[13px] mt-1" style={{ color: "var(--muted-foreground)" }}>
-          Escolha o canal de atendimento
+          Tire dúvidas sobre a contabilidade da sua empresa
         </p>
       </div>
 
