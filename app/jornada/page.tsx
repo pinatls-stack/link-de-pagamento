@@ -50,35 +50,35 @@ const NODE_TEMPLATES: NodeTemplate[] = [
     label: "Último dia útil",
     description: "NFS-e + pró-labore",
     Icon: FileText,
-    x: 163, y: 40,
+    x: 163, y: 35,
   },
   {
     id: 2,
     label: "Dia 5",
     description: "Extrato bancário (prazo: dia 8)",
     Icon: Building2,
-    x: 262, y: 150,
+    x: 262, y: 145,
   },
   {
     id: 3,
     label: "Dia 15",
     description: "eSocial (automático)",
     Icon: EyeOff,
-    x: 272, y: 270,
+    x: 272, y: 265,
   },
   {
     id: 4,
     label: "Dia 20",
     description: "DAS + DARF INSS + DARF IRRF",
     Icon: DollarSign,
-    x: 162, y: 390,
+    x: 162, y: 385,
   },
   {
     id: 5,
     label: "Pós-mês",
     description: "Revisar relatório e tirar dúvidas",
     Icon: ClipboardList,
-    x: 62, y: 510,
+    x: 62, y: 505,
   },
 ];
 
@@ -147,7 +147,7 @@ function MonthSection({
             style={{
               position: "absolute",
               right: 24,
-              top: 484,
+              top: 479,
               width: 116,
               height: 116,
               objectFit: "contain",
@@ -165,7 +165,7 @@ function MonthSection({
             style={{
               position: "absolute",
               left: 24,
-              top: 244,
+              top: 239,
               width: 116,
               height: 116,
               objectFit: "contain",
