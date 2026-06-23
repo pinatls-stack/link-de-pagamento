@@ -23,16 +23,16 @@ import {
 // ── Ilustrações decorativas ───────────────────────────────────────────────────
 // Junho — lado direito (node 558:16)
 const imgIlustracao =
-  "https://www.figma.com/api/mcp/asset/1f252e99-6795-44c1-920b-09791d9b438a";
+  "https://www.figma.com/api/mcp/asset/666f1399-ffa0-422f-8fae-b771f9d034f4";
 // Maio — lado esquerdo (node 558:13)
 const imgMaioIlustracao =
-  "https://www.figma.com/api/mcp/asset/24dc4bf6-9e09-4e8f-9c0d-715f03e7d7ed";
+  "https://www.figma.com/api/mcp/asset/f7496f12-8d6f-425f-8a4c-67962e1d5508";
 // Julho — lado esquerdo (node 558:31)
 const imgJulhoIlustracao =
-  "https://www.figma.com/api/mcp/asset/90de4604-4562-4773-9eb1-c0b928d246eb";
+  "https://www.figma.com/api/mcp/asset/936feaf5-f545-47f9-b015-640969e02763";
 // Cláudia — tela de contato (node 898:42)
 const imgClaudia =
-  "https://www.figma.com/api/mcp/asset/bc26d997-fb16-45af-9eca-fa37f20b0194";
+  "https://www.figma.com/api/mcp/asset/b0317409-7e31-4c36-8338-6ba757ebdfda";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
