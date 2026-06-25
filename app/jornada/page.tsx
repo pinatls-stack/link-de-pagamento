@@ -13,7 +13,6 @@ import {
   Wifi,
   Battery,
   ChevronRight,
-  Menu,
   MapPin,
   Lock,
 } from "lucide-react";
