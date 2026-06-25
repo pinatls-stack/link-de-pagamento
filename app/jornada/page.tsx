@@ -3,12 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  FileText,
-  Building2,
-  EyeOff,
-  DollarSign,
-  ClipboardList,
-  Lock,
   Home,
   Library,
   FilePlus,
@@ -19,19 +13,19 @@ import {
   Wifi,
   Battery,
   ChevronRight,
+  Menu,
+  CheckCircle2,
+  MapPin,
+  Lock,
 } from "lucide-react";
 
-// ── Ilustrações decorativas ───────────────────────────────────────────────────
-// Junho — lado direito (node 558:16)
-const imgIlustracao =
-  "https://www.figma.com/api/mcp/asset/666f1399-ffa0-422f-8fae-b771f9d034f4";
-// Maio — lado esquerdo (node 558:13)
+// ── Ilustrações ───────────────────────────────────────────────────────────────
 const imgMaioIlustracao =
   "https://www.figma.com/api/mcp/asset/f7496f12-8d6f-425f-8a4c-67962e1d5508";
-// Julho — lado esquerdo (node 558:31)
+const imgIlustracao =
+  "https://www.figma.com/api/mcp/asset/666f1399-ffa0-422f-8fae-b771f9d034f4";
 const imgJulhoIlustracao =
   "https://www.figma.com/api/mcp/asset/936feaf5-f545-47f9-b015-640969e02763";
-// Cláudia — tela de contato (node 898:42)
 const imgClaudia =
   "https://www.figma.com/api/mcp/asset/b0317409-7e31-4c36-8338-6ba757ebdfda";
 
@@ -39,78 +33,82 @@ const imgClaudia =
 
 type NodeStatus = "completed" | "active" | "locked";
 
-interface NodeTemplate {
+interface NodeDef {
   id: number;
   label: string;
   description: string;
-  Icon: React.ComponentType<{ size?: number; className?: string }>;
   x: number;
   y: number;
 }
 
-// ── Atividades mensais (mesmas para todos os meses) ───────────────────────────
-
-const NODE_TEMPLATES: NodeTemplate[] = [
-  {
-    id: 1,
-    label: "Último dia útil",
-    description: "NFS-e + pró-labore",
-    Icon: FileText,
-    x: 163, y: 28,
-  },
-  {
-    id: 2,
-    label: "Dia 5",
-    description: "Extrato bancário (prazo: dia 8)",
-    Icon: Building2,
-    x: 262, y: 138,
-  },
-  {
-    id: 3,
-    label: "Dia 15",
-    description: "eSocial (automático)",
-    Icon: EyeOff,
-    x: 272, y: 258,
-  },
-  {
-    id: 4,
-    label: "Dia 20",
-    description: "DAS + DARF INSS + DARF IRRF",
-    Icon: DollarSign,
-    x: 162, y: 378,
-  },
-  {
-    id: 5,
-    label: "Pós-mês",
-    description: "Revisar relatório e tirar dúvidas",
-    Icon: ClipboardList,
-    x: 62, y: 480,
-  },
+const NODES: NodeDef[] = [
+  { id: 1, label: "Dia 05",            description: "NFS-e + pró-labore",              x: 62,  y: 32  },
+  { id: 2, label: "Dia 15",            description: "Extrato bancário (prazo: dia 8)", x: 163, y: 152 },
+  { id: 3, label: "Dia 20",            description: "DAS + DARF INSS + DARF IRRF",     x: 262, y: 272 },
+  { id: 4, label: "Dia 30",            description: "eSocial (automático)",             x: 163, y: 392 },
+  { id: 5, label: "Último dia do mês", description: "Revisar relatório e tirar dúvidas",x: 62,  y: 492 },
 ];
 
-const NODE_SIZE     = 64;
-const SHADOW_OFFSET = 6;   // profundidade do efeito 3D
-const COMPANY       = "Lumina Gestão";
+const NODE_SIZE = 60;
+const COMPANY   = "Lumina Gestão";
+
+// ── Segmented Control ─────────────────────────────────────────────────────────
+
+function SegmentedControl({
+  active,
+  onChange,
+}: {
+  active: "minhas" | "agilize";
+  onChange: (v: "minhas" | "agilize") => void;
+}) {
+  return (
+    <div
+      className="mx-6 mt-3 flex gap-1 p-[3px] rounded-[10px] flex-shrink-0"
+      style={{ background: "var(--secondary)" }}
+    >
+      {(["minhas", "agilize"] as const).map((v) => {
+        const isActive = active === v;
+        return (
+          <button
+            key={v}
+            onClick={() => onChange(v)}
+            className="flex-1 py-2 rounded-lg text-[14px] transition-all"
+            style={{
+              fontWeight: isActive ? 500 : 400,
+              color: isActive ? "var(--foreground)" : "var(--muted-foreground)",
+              background: isActive ? "var(--background)" : "transparent",
+              boxShadow: isActive ? "0 0 12px -2px rgba(0,0,0,0.12)" : "none",
+            }}
+          >
+            {v === "minhas" ? "Minhas demandas" : "Demandas da Agilize"}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 // ── MonthSection ──────────────────────────────────────────────────────────────
 
 function MonthSection({
   month,
   statuses,
-  showIllustration,
-  showLeftIllustration,
-  leftIllustrationSrc,
+  illustration,
+  illustrationSide = "left",
+  illustrationTop = 220,
   sectionHeight,
   "data-month": dataMonth,
 }: {
   month: string;
   statuses: NodeStatus[];
-  showIllustration?: boolean;
-  showLeftIllustration?: boolean;
-  leftIllustrationSrc?: string;
+  illustration?: string;
+  illustrationSide?: "left" | "right";
+  illustrationTop?: number;
   sectionHeight?: number;
   "data-month"?: string;
 }) {
+  const [tab, setTab] = useState<"minhas" | "agilize">("minhas");
+
   return (
     <div
       data-month={dataMonth}
@@ -121,94 +119,76 @@ function MonthSection({
         height: sectionHeight ? `${sectionHeight}px` : "100%",
       }}
     >
-      {/* Banner */}
+      {/* Header card */}
       <div
         className="mx-6 mt-4 rounded-xl px-4 py-3 flex items-center justify-between flex-shrink-0"
-        style={{
-          background: "var(--primary)",
-          boxShadow: "0 5px 0 var(--primary-active), 0 7px 18px rgba(117,55,174,0.32)",
-        }}
+        style={{ background: "var(--purple-100)" }}
       >
-        <div>
-          <p
-            className="text-[11px] font-semibold uppercase tracking-widest"
-            style={{ color: "rgba(255,255,255,0.65)" }}
-          >
-            {COMPANY}
-          </p>
-          <p className="text-[17px] font-semibold text-primary-foreground mt-0.5">
+        <div className="flex flex-col gap-0.5">
+          <p className="text-[14px] font-semibold leading-[20px]" style={{ color: "#522b77" }}>
             {month}
           </p>
+          <p className="text-[14px] font-normal leading-[20px]" style={{ color: "#522b77" }}>
+            {COMPANY}
+          </p>
         </div>
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.18)" }}
+        <button
+          aria-label="Menu"
+          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+          style={{ background: "var(--primary)" }}
         >
-          <FileText size={18} className="text-primary-foreground" />
-        </div>
+          <Menu size={18} color="white" aria-hidden="true" />
+        </button>
       </div>
+
+      {/* Segmented control */}
+      <SegmentedControl active={tab} onChange={setTab} />
 
       {/* Track */}
       <div className="relative flex-1" style={{ minHeight: 0 }}>
-        {/* Ilustração direita (Junho) */}
-        {showIllustration && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imgIlustracao}
-            alt=""
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              right: 24,
-              top: 453,
-              width: 116,
-              height: 116,
-              objectFit: "contain",
-            }}
-          />
-        )}
 
-        {/* Ilustração esquerda (Maio / Julho) */}
-        {showLeftIllustration && (
+        {/* Ilustração */}
+        {illustration && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={leftIllustrationSrc ?? imgMaioIlustracao}
+            src={illustration}
             alt=""
             aria-hidden="true"
             style={{
               position: "absolute",
-              left: 24,
-              top: 229,
-              width: 116,
-              height: 116,
+              [illustrationSide]: 16,
+              top: illustrationTop,
+              width: 110,
+              height: 110,
               objectFit: "contain",
+              pointerEvents: "none",
             }}
           />
         )}
 
         {/* Nodes */}
-        {NODE_TEMPLATES.map((node, idx) => {
+        {NODES.map((node, idx) => {
           const status = statuses[idx];
           const done   = status === "completed";
           const active = status === "active";
           const locked = status === "locked";
-          const { Icon } = node;
 
           return (
             <div
               key={node.id}
               style={{ position: "absolute", left: node.x, top: node.y }}
             >
-              {/* Tooltip "Fazer agora" (nó ativo) */}
+              {/* Tooltip no nó ativo */}
               {active && (
                 <div
-                  className="absolute rounded-xl bg-background"
+                  className="absolute rounded-xl"
                   style={{
                     top: 8,
-                    right: NODE_SIZE + 10,
+                    right: NODE_SIZE + 12,
                     padding: "8px 12px",
                     border: "1px solid var(--border)",
                     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    background: "var(--background)",
                     width: 140,
                   }}
                 >
@@ -232,72 +212,60 @@ function MonthSection({
                       borderLeft: "6px solid var(--background)",
                     }}
                   />
-                  <p
-                    className="text-[11px] font-bold uppercase tracking-wide"
-                    style={{ color: "var(--primary)" }}
-                  >
+                  <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: "var(--primary)" }}>
                     Fazer agora
                   </p>
-                  <p
-                    className="text-[11px] font-medium mt-0.5 leading-tight"
-                    style={{ color: "var(--muted-foreground)" }}
-                  >
+                  <p className="text-[11px] font-medium mt-0.5 leading-tight" style={{ color: "var(--muted-foreground)" }}>
                     {node.description}
                   </p>
                 </div>
               )}
 
-              {/* Botão 3D (estilo Duolingo) */}
-              <div style={{ position: "relative", width: NODE_SIZE, height: NODE_SIZE + SHADOW_OFFSET }}>
-                {/* Camada de sombra — deslocada SHADOW_OFFSET px abaixo */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: SHADOW_OFFSET,
-                    left: 0,
-                    width: NODE_SIZE,
-                    height: NODE_SIZE,
-                    borderRadius: "50%",
-                    background: done
-                      ? "#076e49"
-                      : active
-                      ? "var(--primary-active)"
-                      : "#c8c2d4",
-                  }}
-                />
-                {/* Face principal */}
-                <div
-                  className="flex items-center justify-center"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: NODE_SIZE,
-                    height: NODE_SIZE,
-                    borderRadius: "50%",
-                    ...(done
-                      ? { background: "var(--success)", color: "#fff" }
-                      : active
-                      ? { background: "var(--primary)", color: "var(--primary-foreground)" }
-                      : { background: "var(--muted)", color: "var(--muted-foreground)", border: "2px solid var(--border)" }),
-                  }}
-                >
-                  {locked ? <Lock size={22} /> : <Icon size={22} />}
-                </div>
+              {/* Círculo flat */}
+              <div
+                className="flex items-center justify-center rounded-full"
+                style={{
+                  width: NODE_SIZE,
+                  height: NODE_SIZE,
+                  background: done
+                    ? "#dbfff2"
+                    : active
+                    ? "var(--purple-100)"
+                    : "var(--secondary)",
+                  border: locked ? "1px solid var(--border)" : "none",
+                }}
+              >
+                {done && (
+                  <CheckCircle2
+                    size={24}
+                    style={{ color: "#0c7952" }}
+                    aria-hidden="true"
+                  />
+                )}
+                {active && (
+                  <MapPin
+                    size={24}
+                    style={{ color: "var(--primary)" }}
+                    aria-hidden="true"
+                  />
+                )}
+                {locked && (
+                  <Lock
+                    size={22}
+                    style={{ color: "var(--muted-foreground)" }}
+                    aria-hidden="true"
+                  />
+                )}
               </div>
 
               {/* Label */}
               <p
-                className="absolute whitespace-nowrap text-[11px] font-medium text-center"
+                className="absolute whitespace-nowrap text-[12px] font-normal text-center"
                 style={{
-                  top: NODE_SIZE + SHADOW_OFFSET + 6,
+                  top: NODE_SIZE + 8,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  color: locked
-                    ? "var(--muted-foreground)"
-                    : active
-                    ? "var(--primary)"
-                    : "var(--foreground)",
+                  color: "var(--muted-foreground)",
                 }}
               >
                 {node.label}
@@ -316,7 +284,7 @@ const MAY_STATUSES: NodeStatus[] = [
   "completed", "completed", "completed", "completed", "completed",
 ];
 const JUN_STATUSES: NodeStatus[] = [
-  "completed", "active", "locked", "locked", "locked",
+  "completed", "completed", "active", "locked", "locked",
 ];
 const JUL_STATUSES: NodeStatus[] = [
   "locked", "locked", "locked", "locked", "locked",
@@ -337,30 +305,18 @@ const NAV = [
 function ClaudiaScreen() {
   return (
     <div className="flex-1 flex flex-col px-6" style={{ minHeight: 0 }}>
-      {/* Cabeçalho */}
       <div className="pt-6 pb-2">
-        <p
-          className="text-[11px] font-semibold uppercase tracking-widest"
-          style={{ color: "var(--muted-foreground)" }}
-        >
+        <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
           Assistente de contabilidade
         </p>
         <h1 className="text-[22px] font-semibold mt-0.5" style={{ color: "var(--foreground)" }}>
           Cláudia
         </h1>
       </div>
-
-      {/* Ilustração */}
       <div className="flex justify-center items-center py-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imgClaudia}
-          alt="Cláudia, assistente virtual"
-          style={{ width: 220, height: "auto" }}
-        />
+        <img src={imgClaudia} alt="Cláudia, assistente virtual" style={{ width: 220, height: "auto" }} />
       </div>
-
-      {/* Pergunta */}
       <div className="text-center mb-8">
         <p className="text-[17px] font-semibold" style={{ color: "var(--foreground)" }}>
           Como prefere falar comigo?
@@ -369,50 +325,26 @@ function ClaudiaScreen() {
           Tire dúvidas sobre a contabilidade da sua empresa
         </p>
       </div>
-
-      {/* Opções */}
       <div className="flex flex-col gap-3">
-        <button
-          className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
-          style={{ border: "1px solid var(--border)", background: "var(--background)" }}
-        >
-          <div
-            className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: "var(--purple-100)" }}
+        {[
+          { Icon: MessageCircle, title: "Mensagem de texto",  subtitle: "Envie uma mensagem agora" },
+          { Icon: Video,         title: "Videochamada",       subtitle: "Fale ao vivo com a Cláudia" },
+        ].map(({ Icon, title, subtitle }) => (
+          <button
+            key={title}
+            className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
+            style={{ border: "1px solid var(--border)", background: "var(--background)" }}
           >
-            <MessageCircle size={20} style={{ color: "var(--primary)" }} />
-          </div>
-          <div className="flex flex-col flex-1">
-            <span className="text-[15px] font-semibold" style={{ color: "var(--foreground)" }}>
-              Mensagem de texto
-            </span>
-            <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
-              Envie uma mensagem agora
-            </span>
-          </div>
-          <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
-        </button>
-
-        <button
-          className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
-          style={{ border: "1px solid var(--border)", background: "var(--background)" }}
-        >
-          <div
-            className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: "var(--purple-100)" }}
-          >
-            <Video size={20} style={{ color: "var(--primary)" }} />
-          </div>
-          <div className="flex flex-col flex-1">
-            <span className="text-[15px] font-semibold" style={{ color: "var(--foreground)" }}>
-              Videochamada
-            </span>
-            <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>
-              Fale ao vivo com a Cláudia
-            </span>
-          </div>
-          <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
-        </button>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "var(--purple-100)" }}>
+              <Icon size={20} style={{ color: "var(--primary)" }} />
+            </div>
+            <div className="flex flex-col flex-1">
+              <span className="text-[15px] font-semibold" style={{ color: "var(--foreground)" }}>{title}</span>
+              <span className="text-[12px]" style={{ color: "var(--muted-foreground)" }}>{subtitle}</span>
+            </div>
+            <ChevronRight size={18} style={{ color: "var(--muted-foreground)" }} />
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -426,27 +358,22 @@ export default function JornadaPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sectionHeight, setSectionHeight] = useState(0);
 
-  // 1. Mede a altura real do container assim que o DOM estiver pronto
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    setSectionHeight(container.clientHeight);
+    const el = scrollRef.current;
+    if (!el) return;
+    setSectionHeight(el.clientHeight);
   }, []);
 
-  // 2. Só rola para Junho depois que as seções têm a altura correta
   useEffect(() => {
     if (!sectionHeight) return;
-    const container = scrollRef.current;
-    if (!container) return;
-    const june = container.querySelector("[data-month='junho-2026']") as HTMLElement | null;
-    if (june) container.scrollTop = june.offsetTop;
+    const el = scrollRef.current;
+    if (!el) return;
+    const june = el.querySelector("[data-month='junho-2026']") as HTMLElement | null;
+    if (june) el.scrollTop = june.offsetTop;
   }, [sectionHeight]);
 
   return (
-    <div
-      className="min-h-screen flex justify-center items-center"
-      style={{ background: "var(--secondary)" }}
-    >
+    <div className="min-h-screen flex justify-center items-center" style={{ background: "var(--secondary)" }}>
       <div className="relative w-[390px] h-[844px] bg-background overflow-hidden flex flex-col rounded-[40px] shadow-2xl">
 
         {/* Dynamic Island */}
@@ -464,7 +391,7 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Conteúdo principal */}
+        {/* Conteúdo */}
         {activeTab === "claudia" ? (
           <ClaudiaScreen />
         ) : (
@@ -476,21 +403,26 @@ export default function JornadaPage() {
             <MonthSection
               month="Maio de 2026"
               statuses={MAY_STATUSES}
-              showLeftIllustration
+              illustration={imgMaioIlustracao}
+              illustrationSide="left"
+              illustrationTop={200}
               sectionHeight={sectionHeight}
             />
             <MonthSection
               month="Junho de 2026"
               statuses={JUN_STATUSES}
-              showIllustration
+              illustration={imgIlustracao}
+              illustrationSide="left"
+              illustrationTop={260}
               sectionHeight={sectionHeight}
               data-month="junho-2026"
             />
             <MonthSection
               month="Julho de 2026"
               statuses={JUL_STATUSES}
-              showLeftIllustration
-              leftIllustrationSrc={imgJulhoIlustracao}
+              illustration={imgJulhoIlustracao}
+              illustrationSide="left"
+              illustrationTop={200}
               sectionHeight={sectionHeight}
             />
           </div>
