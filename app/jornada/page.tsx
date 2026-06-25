@@ -230,12 +230,12 @@ function MonthSection({
                   zIndex: isTooltipOpen ? 20 : 1,
                 }}
               >
-                {/* Tooltip acima do nó ativo */}
+                {/* Tooltip abaixo do nó ativo */}
                 {isActive && isTooltipOpen && (
                   <div
                     className="absolute"
                     style={{
-                      bottom: "calc(100% + 16px)",
+                      top: "calc(100% + 14px)",
                       left: "50%",
                       transform: "translateX(-50%)",
                       width: 280,
@@ -245,34 +245,45 @@ function MonthSection({
                       zIndex: 30,
                     }}
                   >
-                    {/* Seta apontando para baixo */}
+                    {/* Seta apontando para cima */}
                     <span style={{
                       position: "absolute",
-                      bottom: -8,
+                      top: -8,
                       left: "50%",
                       transform: "translateX(-50%)",
                       width: 0,
                       height: 0,
                       borderLeft: "10px solid transparent",
                       borderRight: "10px solid transparent",
-                      borderTop: "10px solid #7537ae",
+                      borderBottom: "10px solid #7537ae",
                     }} />
 
-                    {/* Título e subtítulo */}
-                    <p className="text-[16px] font-semibold leading-6 text-white">
+                    {/* Título */}
+                    <p style={{ fontSize: 16, fontWeight: 600, lineHeight: "24px", color: "white" }}>
                       {node.tooltipTitle}
                     </p>
-                    <p className="text-[14px] font-normal leading-5 text-white mt-1">
+                    {/* Subtítulo */}
+                    <p style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", color: "white", marginTop: 8 }}>
                       Etapa {idx + 1} de {NODES.length}
                     </p>
 
                     {/* Botão */}
                     <button
-                      className="mt-3 w-full flex items-center justify-center py-1.5 rounded-lg text-[12px] font-medium"
                       style={{
+                        marginTop: 12,
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "6px 8px",
+                        borderRadius: 8,
                         background: "white",
                         border: "1px solid #eae6f0",
                         color: "#2a2630",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        lineHeight: "18px",
+                        cursor: "pointer",
                       }}
                     >
                       {node.tooltipButton}
