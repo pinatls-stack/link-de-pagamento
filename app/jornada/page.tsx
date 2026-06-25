@@ -38,14 +38,16 @@ interface NodeDef {
   id: number;
   label: string;
   description: string;
+  tooltipTitle: string;
+  tooltipButton: string;
 }
 
 const NODES: NodeDef[] = [
-  { id: 1, label: "Dia 05",            description: "NFS-e + pró-labore"               },
-  { id: 2, label: "Dia 15",            description: "Extrato bancário (prazo: dia 8)"  },
-  { id: 3, label: "Dia 20",            description: "DAS + DARF INSS + DARF IRRF"      },
-  { id: 4, label: "Dia 30",            description: "eSocial (automático)"              },
-  { id: 5, label: "Último dia do mês", description: "Revisar relatório e tirar dúvidas" },
+  { id: 1, label: "Dia 05",            description: "NFS-e + pró-labore",                tooltipTitle: "Emitir notas fiscais", tooltipButton: "Acessar NFS-e"    },
+  { id: 2, label: "Dia 15",            description: "Extrato bancário (prazo: dia 8)",   tooltipTitle: "Enviar extrato",       tooltipButton: "Acessar banco"    },
+  { id: 3, label: "Dia 20",            description: "DAS + DARF INSS + DARF IRRF",       tooltipTitle: "Pagar impostos",       tooltipButton: "Acessar boletos"  },
+  { id: 4, label: "Dia 30",            description: "eSocial (automático)",               tooltipTitle: "Enviar eSocial",       tooltipButton: "Acessar eSocial"  },
+  { id: 5, label: "Último dia do mês", description: "Revisar relatório e tirar dúvidas", tooltipTitle: "Revisar relatório",    tooltipButton: "Acessar relatório"},
 ];
 
 // Deslocamento horizontal de cada nó para criar a curva S
@@ -156,6 +158,7 @@ function MonthSection({
   "data-month"?: string;
 }) {
   const [tab, setTab] = useState<"minhas" | "agilize">("minhas");
+  const [openTooltip, setOpenTooltip] = useState<number | null>(null);
 
   return (
     <div
@@ -215,6 +218,7 @@ function MonthSection({
             const status = statuses[idx];
             const isActive = status === "active";
             const offset = S_OFFSETS[idx];
+            const isTooltipOpen = openTooltip === idx;
 
             return (
               <div
@@ -223,10 +227,67 @@ function MonthSection({
                 style={{
                   transform: `translateX(${offset}px)`,
                   transition: "transform 0.2s ease",
-                  zIndex: 1,
+                  zIndex: isTooltipOpen ? 20 : 1,
                 }}
               >
-                <NodeCircle status={status} />
+                {/* Tooltip acima do nó ativo */}
+                {isActive && isTooltipOpen && (
+                  <div
+                    className="absolute"
+                    style={{
+                      bottom: "calc(100% + 16px)",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: 280,
+                      background: "#7537ae",
+                      borderRadius: 16,
+                      padding: "15px 13px 13px",
+                      zIndex: 30,
+                    }}
+                  >
+                    {/* Seta apontando para baixo */}
+                    <span style={{
+                      position: "absolute",
+                      bottom: -8,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: 0,
+                      height: 0,
+                      borderLeft: "10px solid transparent",
+                      borderRight: "10px solid transparent",
+                      borderTop: "10px solid #7537ae",
+                    }} />
+
+                    {/* Título e subtítulo */}
+                    <p className="text-[16px] font-semibold leading-6 text-white">
+                      {node.tooltipTitle}
+                    </p>
+                    <p className="text-[14px] font-normal leading-5 text-white mt-1">
+                      Etapa {idx + 1} de {NODES.length}
+                    </p>
+
+                    {/* Botão */}
+                    <button
+                      className="mt-3 w-full flex items-center justify-center py-1.5 rounded-lg text-[12px] font-medium"
+                      style={{
+                        background: "white",
+                        border: "1px solid #eae6f0",
+                        color: "#2a2630",
+                      }}
+                    >
+                      {node.tooltipButton}
+                    </button>
+                  </div>
+                )}
+
+                {/* Círculo — clicável apenas se ativo */}
+                <button
+                  aria-label={isActive ? `Abrir detalhes: ${node.tooltipTitle}` : node.label}
+                  onClick={() => isActive ? setOpenTooltip(isTooltipOpen ? null : idx) : undefined}
+                  style={{ cursor: isActive ? "pointer" : "default", background: "none", border: "none", padding: 0 }}
+                >
+                  <NodeCircle status={status} />
+                </button>
 
                 <p
                   className="text-[12px] font-normal text-center whitespace-nowrap"
