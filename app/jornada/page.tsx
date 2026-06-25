@@ -159,22 +159,9 @@ function MonthSection({
 }) {
   const [tab, setTab] = useState<"minhas" | "agilize">("minhas");
   const [openTooltip, setOpenTooltip] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (openTooltip === null) return;
-    const handler = (e: MouseEvent) => {
-      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        setOpenTooltip(null);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [openTooltip]);
 
   return (
     <div
-      ref={sectionRef}
       data-month={dataMonth}
       className="flex flex-col overflow-hidden"
       style={{
@@ -243,6 +230,18 @@ function MonthSection({
                   zIndex: isTooltipOpen ? 20 : 1,
                 }}
               >
+                {/* Overlay invisível — fecha ao clicar fora */}
+                {isActive && isTooltipOpen && (
+                  <div
+                    onClick={() => setOpenTooltip(null)}
+                    style={{
+                      position: "fixed",
+                      inset: 0,
+                      zIndex: 25,
+                    }}
+                  />
+                )}
+
                 {/* Tooltip abaixo do nó ativo */}
                 {isActive && isTooltipOpen && (
                   <div
