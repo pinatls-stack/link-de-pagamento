@@ -112,8 +112,8 @@ function NodeCircle({ status }: { status: NodeStatus }) {
       <>
         <style>{`
           @keyframes nodeRingPulse {
-            0%, 100% { box-shadow: 0 0 0 4px #ffffff, 0 0 0 9px #7537ae; }
-            50%       { box-shadow: 0 0 0 4px #ffffff, 0 0 0 14px rgba(117,55,174,0.30); }
+            0%, 100% { box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #7537ae; }
+            50%       { box-shadow: 0 0 0 3px #ffffff, 0 0 0 9px rgba(117,55,174,0.28); }
           }
         `}</style>
         <div
