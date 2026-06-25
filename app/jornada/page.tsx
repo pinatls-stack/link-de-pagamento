@@ -108,12 +108,25 @@ function NodeCircle({ status }: { status: NodeStatus }) {
 
   if (status === "active") {
     return (
-      <div
-        className="flex items-center justify-center rounded-full shrink-0"
-        style={{ width: 60, height: 60, background: "#f5ecfe" }}
-      >
-        <MapPin size={24} style={{ color: "#7537ae" }} aria-hidden="true" />
-      </div>
+      <>
+        <style>{`
+          @keyframes nodeRingPulse {
+            0%, 100% { box-shadow: 0 0 0 4px #ffffff, 0 0 0 9px #7537ae; }
+            50%       { box-shadow: 0 0 0 4px #ffffff, 0 0 0 14px rgba(117,55,174,0.30); }
+          }
+        `}</style>
+        <div
+          className="flex items-center justify-center rounded-full shrink-0"
+          style={{
+            width: 60,
+            height: 60,
+            background: "#f5ecfe",
+            animation: "nodeRingPulse 2s ease-in-out infinite",
+          }}
+        >
+          <MapPin size={24} style={{ color: "#7537ae" }} aria-hidden="true" />
+        </div>
+      </>
     );
   }
 
