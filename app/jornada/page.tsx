@@ -236,47 +236,6 @@ function MonthSection({
                   zIndex: 1,
                 }}
               >
-                {/* Tooltip no nó ativo */}
-                {isActive && (
-                  <div
-                    className="absolute rounded-xl"
-                    style={{
-                      top: 10,
-                      right: 68,
-                      padding: "8px 12px",
-                      border: "1px solid #e5e0ef",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                      background: "white",
-                      width: 148,
-                      zIndex: 10,
-                    }}
-                  >
-                    {/* Seta */}
-                    <span style={{
-                      position: "absolute",
-                      right: -7, top: "50%", transform: "translateY(-50%)",
-                      width: 0, height: 0,
-                      borderTop: "6px solid transparent",
-                      borderBottom: "6px solid transparent",
-                      borderLeft: "7px solid #e5e0ef",
-                    }} />
-                    <span style={{
-                      position: "absolute",
-                      right: -5, top: "50%", transform: "translateY(-50%)",
-                      width: 0, height: 0,
-                      borderTop: "5px solid transparent",
-                      borderBottom: "5px solid transparent",
-                      borderLeft: "6px solid white",
-                    }} />
-                    <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: "#7537ae" }}>
-                      Fazer agora
-                    </p>
-                    <p className="text-[11px] font-medium mt-0.5 leading-tight" style={{ color: "#483f59" }}>
-                      {node.description}
-                    </p>
-                  </div>
-                )}
-
                 <NodeCircle status={status} />
 
                 <p
