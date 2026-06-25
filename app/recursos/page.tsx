@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import {
   Home,
   Library,
@@ -15,6 +16,58 @@ import {
   Newspaper,
   MessageSquare,
 } from "lucide-react";
+
+// ── Drag-to-scroll horizontal ─────────────────────────────────────────────────
+function useDragScroll() {
+  const ref = useRef<HTMLDivElement>(null);
+  const drag = useRef({ active: false, startX: 0, scrollLeft: 0 });
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    drag.current = { active: true, startX: e.pageX - el.offsetLeft, scrollLeft: el.scrollLeft };
+    el.style.cursor = "grabbing";
+  };
+  const onMouseUp = () => {
+    drag.current.active = false;
+    if (ref.current) ref.current.style.cursor = "grab";
+  };
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!drag.current.active || !ref.current) return;
+    e.preventDefault();
+    const x = e.pageX - ref.current.offsetLeft;
+    ref.current.scrollLeft = drag.current.scrollLeft - (x - drag.current.startX);
+  };
+
+  return { ref, onMouseDown, onMouseUp, onMouseMove, onMouseLeave: onMouseUp };
+}
+
+// ── Scroll row com fade à direita ─────────────────────────────────────────────
+function HScrollRow({ children }: { children: React.ReactNode }) {
+  const drag = useDragScroll();
+  return (
+    <div className="relative">
+      <div
+        ref={drag.ref}
+        className="w-full overflow-x-auto scrollbar-hide select-none"
+        style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", cursor: "grab" }}
+        onMouseDown={drag.onMouseDown}
+        onMouseUp={drag.onMouseUp}
+        onMouseMove={drag.onMouseMove}
+        onMouseLeave={drag.onMouseLeave}
+      >
+        <div className="inline-flex gap-4 pb-1" style={{ paddingLeft: 24, paddingRight: 24 }}>
+          {children}
+        </div>
+      </div>
+      {/* fade indicando mais conteúdo à direita */}
+      <div
+        className="pointer-events-none absolute right-0 top-0 h-full w-12"
+        style={{ background: "linear-gradient(to left, var(--background), transparent)" }}
+      />
+    </div>
+  );
+}
 
 // ── Assets (Figma MCP) ────────────────────────────────────────────────────────
 const imgFoto     = "https://www.figma.com/api/mcp/asset/108e6357-f7f9-4d2d-b7dd-5df9f23ce9be";
@@ -242,9 +295,7 @@ export default function RecursosPage() {
             {/* Para minha contabilidade */}
             <div className="flex flex-col gap-4">
               <div className="px-6"><SectionTitle>Para minha contabilidade</SectionTitle></div>
-              {/* overflow-x-auto no container block; inline-flex interno cresce livremente */}
-              <div className="w-full overflow-x-auto scrollbar-hide" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
-                <div className="inline-flex gap-4 pb-1" style={{ paddingLeft: 24, paddingRight: 24 }}>
+              <HScrollRow>
                   <BannerCard
                     title="Jornada contábil"
                     description="Acompanhe suas tarefas mensais"
@@ -289,15 +340,13 @@ export default function RecursosPage() {
                       </svg>
                     }
                   />
-                </div>
-              </div>
+              </HScrollRow>
             </div>
 
             {/* Para minhas finanças */}
             <div className="flex flex-col gap-4">
               <div className="px-6"><SectionTitle>Para minhas finanças</SectionTitle></div>
-              <div className="w-full overflow-x-auto scrollbar-hide" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
-                <div className="inline-flex gap-4 pb-1" style={{ paddingLeft: 24, paddingRight: 24 }}>
+              <HScrollRow>
                   <BannerCard
                     title="Elizeo"
                     description="Seu agente de cobranças"
@@ -342,15 +391,13 @@ export default function RecursosPage() {
                       </svg>
                     }
                   />
-                </div>
-              </div>
+              </HScrollRow>
             </div>
 
             {/* Meus benefícios */}
             <div className="flex flex-col gap-4">
               <div className="px-6"><SectionTitle>Meus benefícios</SectionTitle></div>
-              <div className="w-full overflow-x-auto scrollbar-hide" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
-                <div className="inline-flex gap-4 pb-1" style={{ paddingLeft: 24, paddingRight: 24 }}>
+              <HScrollRow>
                   <BenefitCard
                     title="Wellhub"
                     description="Tenha acesso a academias e diversos esportes"
@@ -369,8 +416,7 @@ export default function RecursosPage() {
                     imgSrc={imgFoto2}
                     cta="Indicar"
                   />
-                </div>
-              </div>
+              </HScrollRow>
             </div>
 
             {/* Dúvidas */}
