@@ -173,24 +173,15 @@ function MonthSection({
 
         {/* Header card */}
         <div
-          className="rounded-[8px] px-4 py-3 flex items-center justify-between shrink-0"
+          className="rounded-[8px] px-4 py-3 flex flex-col gap-[2px] shrink-0"
           style={{ background: "#f5ecfe" }}
         >
-          <div className="flex flex-col gap-[2px]">
-            <p className="text-[14px] font-semibold leading-5" style={{ color: "#522b77" }}>
-              {month}
-            </p>
-            <p className="text-[14px] font-normal leading-5" style={{ color: "#522b77" }}>
-              {COMPANY}
-            </p>
-          </div>
-          <button
-            aria-label="Menu"
-            className="flex items-center justify-center px-2 py-1.5 rounded-lg shrink-0"
-            style={{ background: "#7537ae" }}
-          >
-            <Menu size={20} color="white" aria-hidden="true" />
-          </button>
+          <p className="text-[14px] font-semibold leading-5" style={{ color: "#522b77" }}>
+            {month}
+          </p>
+          <p className="text-[14px] font-normal leading-5" style={{ color: "#522b77" }}>
+            {COMPANY}
+          </p>
         </div>
 
         {/* Segmented control */}
