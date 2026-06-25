@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   FileText,
   Building2,
@@ -420,6 +421,7 @@ function ClaudiaScreen() {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function JornadaPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("inicio");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sectionHeight, setSectionHeight] = useState(0);
@@ -504,7 +506,7 @@ export default function JornadaPage() {
             return (
               <button
                 key={id}
-                onClick={() => setActiveTab(id)}
+                onClick={() => id === "recursos" ? router.push("/recursos") : setActiveTab(id)}
                 className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl w-[72px] transition-colors"
                 style={{
                   background: isActive ? "var(--purple-100)" : "transparent",
