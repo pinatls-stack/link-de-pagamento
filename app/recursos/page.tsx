@@ -49,14 +49,19 @@ function HScrollRow({ children }: { children: React.ReactNode }) {
     <div className="relative">
       <div
         ref={drag.ref}
-        className="w-full overflow-x-auto scrollbar-hide select-none"
-        style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", cursor: "grab" }}
+        className="w-full overflow-x-auto scrollbar-hide select-none px-6"
+        style={{
+          scrollSnapType: "x mandatory",
+          scrollPaddingLeft: "1.5rem",
+          WebkitOverflowScrolling: "touch",
+          cursor: "grab",
+        }}
         onMouseDown={drag.onMouseDown}
         onMouseUp={drag.onMouseUp}
         onMouseMove={drag.onMouseMove}
         onMouseLeave={drag.onMouseLeave}
       >
-        <div className="inline-flex gap-4 pb-1 px-6">
+        <div className="inline-flex gap-4 pb-1">
           {children}
         </div>
       </div>
