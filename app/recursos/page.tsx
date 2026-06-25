@@ -56,7 +56,7 @@ function HScrollRow({ children }: { children: React.ReactNode }) {
         onMouseMove={drag.onMouseMove}
         onMouseLeave={drag.onMouseLeave}
       >
-        <div className="inline-flex gap-4 pb-1" style={{ paddingLeft: 24, paddingRight: 24 }}>
+        <div className="inline-flex gap-4 pb-1 px-6">
           {children}
         </div>
       </div>
