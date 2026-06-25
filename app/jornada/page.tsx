@@ -120,7 +120,7 @@ function NodeCircle({ status }: { status: NodeStatus }) {
   return (
     <div
       className="flex items-center justify-center rounded-full shrink-0"
-      style={{ width: 60, height: 60, background: "#f8f7fb", border: "1px solid #e5e0ef" }}
+      style={{ width: 60, height: 60, background: "#f8f7fb" }}
     >
       <Lock size={22} style={{ color: "#9b92b0" }} aria-hidden="true" />
     </div>
