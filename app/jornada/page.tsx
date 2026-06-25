@@ -202,10 +202,9 @@ function MonthSection({
               style={{
                 position: "absolute",
                 [illustrationSide]: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-                width: 100,
-                height: 100,
+                top: illustrationSide === "left" ? "22%" : "52%",
+                width: 130,
+                height: 130,
                 objectFit: "contain",
                 pointerEvents: "none",
                 zIndex: 0,
