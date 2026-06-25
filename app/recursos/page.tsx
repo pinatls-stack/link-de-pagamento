@@ -43,7 +43,7 @@ function BannerCard({ title, description, iconBg, icon }: BannerCardProps) {
   return (
     <div
       className="flex-shrink-0 w-[200px] flex flex-col gap-3 p-4 rounded-xl"
-      style={{ border: "1px solid var(--border)", background: "var(--background)" }}
+      style={{ border: "1px solid var(--border)", background: "var(--background)", scrollSnapAlign: "start" }}
     >
       <div
         className="w-10 h-10 rounded-[20px] flex items-center justify-center"
@@ -80,7 +80,7 @@ function BenefitCard({ title, description, imgSrc, cta }: BenefitCardProps) {
   return (
     <div
       className="flex-shrink-0 w-[200px] flex flex-col gap-4 p-4 rounded-xl"
-      style={{ border: "1px solid var(--border)", background: "var(--background)" }}
+      style={{ border: "1px solid var(--border)", background: "var(--background)", scrollSnapAlign: "start" }}
     >
       <div className="flex flex-col gap-0.5">
         <span
@@ -203,10 +203,10 @@ export default function RecursosPage() {
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ minHeight: 0 }}>
-          <div className="flex flex-col gap-8 px-6 pt-5 pb-6">
+          <div className="flex flex-col gap-8 pt-5 pb-6">
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-6">
               <div className="flex items-center gap-3">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
@@ -241,9 +241,9 @@ export default function RecursosPage() {
 
             {/* Para minha contabilidade */}
             <div className="flex flex-col gap-4">
-              <SectionTitle>Para minha contabilidade</SectionTitle>
+              <div className="px-6"><SectionTitle>Para minha contabilidade</SectionTitle></div>
               <div
-                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1"
+                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1 pl-6"
                 style={{ scrollSnapType: "x mandatory" }}
               >
                 <BannerCard
@@ -290,14 +290,15 @@ export default function RecursosPage() {
                     </svg>
                   }
                 />
+                <div className="flex-shrink-0 w-6" aria-hidden="true" />
               </div>
             </div>
 
             {/* Para minhas finanças */}
             <div className="flex flex-col gap-4">
-              <SectionTitle>Para minhas finanças</SectionTitle>
+              <div className="px-6"><SectionTitle>Para minhas finanças</SectionTitle></div>
               <div
-                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1"
+                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1 pl-6"
                 style={{ scrollSnapType: "x mandatory" }}
               >
                 <BannerCard
@@ -344,14 +345,15 @@ export default function RecursosPage() {
                     </svg>
                   }
                 />
+                <div className="flex-shrink-0 w-6" aria-hidden="true" />
               </div>
             </div>
 
             {/* Meus benefícios */}
             <div className="flex flex-col gap-4">
-              <SectionTitle>Meus benefícios</SectionTitle>
+              <div className="px-6"><SectionTitle>Meus benefícios</SectionTitle></div>
               <div
-                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1"
+                className="flex gap-4 overflow-x-auto scrollbar-hide pb-1 pl-6"
                 style={{ scrollSnapType: "x mandatory" }}
               >
                 <BenefitCard
@@ -372,11 +374,12 @@ export default function RecursosPage() {
                   imgSrc={imgFoto2}
                   cta="Indicar"
                 />
+                <div className="flex-shrink-0 w-6" aria-hidden="true" />
               </div>
             </div>
 
             {/* Dúvidas */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6">
               <SectionTitle>Dúvidas</SectionTitle>
               <ListItem
                 iconBg="var(--secondary)"
@@ -390,7 +393,7 @@ export default function RecursosPage() {
             </div>
 
             {/* Novidades */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6">
               <SectionTitle>Novidades</SectionTitle>
               <ListItem
                 iconBg="var(--secondary)"
@@ -404,7 +407,7 @@ export default function RecursosPage() {
             </div>
 
             {/* Deixe a sua opinião */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6">
               <SectionTitle>Deixe a sua opinião</SectionTitle>
               <ListItem
                 iconBg="var(--secondary)"
