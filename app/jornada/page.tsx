@@ -21,6 +21,9 @@ import {
   HelpCircle,
   FileText,
   LogOut,
+  ShieldCheck,
+  Contact,
+  Landmark,
 } from "lucide-react";
 
 // ── Ilustrações ───────────────────────────────────────────────────────────────
@@ -398,10 +401,13 @@ function ClaudiaScreen() {
 // ── ConfiguracoesScreen ───────────────────────────────────────────────────────
 
 const CONFIG_ITEMS = [
-  { Icon: CreditCard, label: "Plano e assinatura",  subtitle: "Gerencie seu plano Agilize"    },
-  { Icon: Bell,       label: "Notificações",         subtitle: "Alertas e lembretes de prazos" },
-  { Icon: FileText,   label: "Documentos",           subtitle: "Contratos e comprovantes"      },
-  { Icon: HelpCircle, label: "Central de ajuda",     subtitle: "Dúvidas e suporte"             },
+  { Icon: CreditCard,   label: "Plano e assinatura",    subtitle: "Gerencie seu plano Agilize"      },
+  { Icon: ShieldCheck,  label: "Certificado digital",   subtitle: "e-CNPJ e certificados A1/A3"     },
+  { Icon: Contact,      label: "Dados de contato",      subtitle: "Telefone, e-mail e endereço"     },
+  { Icon: Landmark,     label: "Conta PJ",              subtitle: "Dados bancários da empresa"      },
+  { Icon: Bell,         label: "Notificações",           subtitle: "Alertas e lembretes de prazos"  },
+  { Icon: FileText,     label: "Documentos",             subtitle: "Contratos e comprovantes"       },
+  { Icon: HelpCircle,   label: "Central de ajuda",       subtitle: "Dúvidas e suporte"              },
 ];
 
 // Item de lista reutilizável — sem borda, ícone cinza
