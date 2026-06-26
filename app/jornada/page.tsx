@@ -447,7 +447,7 @@ function ConfiguracoesScreen() {
     <div className="flex-1 flex flex-col" style={{ minHeight: 0 }}>
       <div className="px-6 pt-6 pb-4">
         <h1 className="text-[22px] font-semibold" style={{ color: "#2a2630", lineHeight: "30px" }}>
-          Configurações
+          Mais detalhes
         </h1>
       </div>
 
