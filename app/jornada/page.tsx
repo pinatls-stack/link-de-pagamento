@@ -419,7 +419,7 @@ function ListItem({ Icon, label, subtitle }: { Icon: React.ElementType; label: s
     >
       <div
         className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-        style={{ background: "#f3f2f5" }}
+        style={{ background: "#f8f7fb" }}
       >
         <Icon size={18} style={{ color: "#9b92b0" }} aria-hidden="true" />
       </div>
