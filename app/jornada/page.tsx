@@ -430,68 +430,25 @@ function ListItem({ Icon, label, subtitle }: { Icon: React.ElementType; label: s
   );
 }
 
-// Seção de lista com título e separadores entre itens
-function ListSection({ title, items }: { title: string; items: { Icon: React.ElementType; label: string; subtitle: string }[] }) {
-  return (
-    <div className="flex flex-col">
-      <p className="px-4 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "#9b92b0", letterSpacing: "0.08em" }}>
-        {title}
-      </p>
-      <div className="flex flex-col">
-        {items.map(({ Icon, label, subtitle }, idx) => (
-          <div key={label}>
-            <ListItem Icon={Icon} label={label} subtitle={subtitle} />
-            {idx < items.length - 1 && (
-              <div className="mx-4" style={{ height: 1, background: "#f3f2f5" }} />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function ConfiguracoesScreen() {
+  const allItems = [
+    { Icon: Building2,  label: "Configurações da sua empresa", subtitle: "CNPJ, endereço e sócios"       },
+    ...CONFIG_ITEMS,
+    { Icon: LogOut,     label: "Sair da conta",                subtitle: "Encerrar sessão atual"         },
+  ];
+
   return (
     <div className="flex-1 flex flex-col" style={{ minHeight: 0 }}>
-      {/* Header */}
       <div className="px-6 pt-6 pb-4">
         <h1 className="text-[22px] font-semibold" style={{ color: "#2a2630", lineHeight: "30px" }}>
           Configurações
         </h1>
       </div>
 
-      <div className="flex flex-col gap-6 px-2 flex-1 overflow-y-auto scrollbar-hide pb-4">
-        {/* Seção Onboarding */}
-        <ListSection
-          title="Onboarding"
-          items={[
-            { Icon: Building2,  label: "Configurações da sua empresa", subtitle: "CNPJ, endereço e sócios"       },
-          ]}
-        />
-
-        {/* Seção Configurações */}
-        <ListSection
-          title="Configurações"
-          items={CONFIG_ITEMS}
-        />
-
-        {/* Sair */}
-        <div className="flex flex-col px-2">
-          <button
-            className="flex items-center gap-4 px-4 py-3 w-full text-left rounded-xl transition-colors"
-            style={{ background: "transparent" }}
-          >
-            <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#fde8e8" }}>
-              <LogOut size={18} style={{ color: "#c0392b" }} aria-hidden="true" />
-            </div>
-            <div className="flex flex-col flex-1 gap-[2px]">
-              <span className="text-[15px] font-medium" style={{ color: "#c0392b", lineHeight: "22px" }}>Sair da conta</span>
-              <span className="text-[12px] font-normal" style={{ color: "#e57373", lineHeight: "18px" }}>Encerrar sessão atual</span>
-            </div>
-            <ChevronRight size={16} style={{ color: "#e57373" }} aria-hidden="true" />
-          </button>
-        </div>
+      <div className="flex flex-col px-2 flex-1 overflow-y-auto scrollbar-hide pb-4">
+        {allItems.map(({ Icon, label, subtitle }) => (
+          <ListItem key={label} Icon={Icon} label={label} subtitle={subtitle} />
+        ))}
       </div>
     </div>
   );
