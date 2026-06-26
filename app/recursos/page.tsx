@@ -15,6 +15,7 @@ import {
   Star,
   Newspaper,
   MessageSquare,
+  PackagePlus,
 } from "lucide-react";
 
 // ── Drag-to-scroll horizontal ─────────────────────────────────────────────────
@@ -449,6 +450,15 @@ export default function RecursosPage() {
                 title="Prêmio Reclame Aqui"
                 subtitle="Vote na Agilize"
                 cta="Votar"
+              />
+              <ListItem
+                iconBg="var(--purple-100)"
+                icon={
+                  <PackagePlus size={18} style={{ color: "var(--primary)" }} aria-hidden="true" />
+                }
+                title="Serviços adicionais"
+                subtitle="Contrate serviços extras para sua empresa"
+                cta="Contratar"
               />
             </div>
 
