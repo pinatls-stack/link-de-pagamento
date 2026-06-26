@@ -452,9 +452,9 @@ export default function RecursosPage() {
                 cta="Votar"
               />
               <ListItem
-                iconBg="var(--purple-100)"
+                iconBg="#f8f7fb"
                 icon={
-                  <PackagePlus size={18} style={{ color: "var(--primary)" }} aria-hidden="true" />
+                  <PackagePlus size={18} style={{ color: "#9b92b0" }} aria-hidden="true" />
                 }
                 title="Serviços adicionais"
                 subtitle="Contrate serviços extras para sua empresa"
