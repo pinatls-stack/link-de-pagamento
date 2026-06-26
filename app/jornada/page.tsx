@@ -398,91 +398,100 @@ function ClaudiaScreen() {
 // ── ConfiguracoesScreen ───────────────────────────────────────────────────────
 
 const CONFIG_ITEMS = [
-  { Icon: Building2,  label: "Dados da empresa",    subtitle: "CNPJ, endereço e sócios"        },
-  { Icon: CreditCard, label: "Plano e assinatura",  subtitle: "Gerencie seu plano Agilize"     },
-  { Icon: Bell,       label: "Notificações",         subtitle: "Alertas e lembretes de prazos"  },
-  { Icon: FileText,   label: "Documentos",           subtitle: "Contratos e comprovantes"       },
-  { Icon: HelpCircle, label: "Central de ajuda",     subtitle: "Dúvidas e suporte"              },
+  { Icon: CreditCard, label: "Plano e assinatura",  subtitle: "Gerencie seu plano Agilize"    },
+  { Icon: Bell,       label: "Notificações",         subtitle: "Alertas e lembretes de prazos" },
+  { Icon: FileText,   label: "Documentos",           subtitle: "Contratos e comprovantes"      },
+  { Icon: HelpCircle, label: "Central de ajuda",     subtitle: "Dúvidas e suporte"             },
 ];
+
+// Item de lista reutilizável — sem borda, ícone cinza
+function ListItem({ Icon, label, subtitle }: { Icon: React.ElementType; label: string; subtitle: string }) {
+  return (
+    <button
+      className="flex items-center gap-4 px-4 py-3 w-full text-left transition-colors rounded-xl"
+      style={{ background: "transparent" }}
+    >
+      <div
+        className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+        style={{ background: "#f3f2f5" }}
+      >
+        <Icon size={18} style={{ color: "#9b92b0" }} aria-hidden="true" />
+      </div>
+      <div className="flex flex-col flex-1 gap-[2px]">
+        <span className="text-[15px] font-medium" style={{ color: "#2a2630", lineHeight: "22px" }}>
+          {label}
+        </span>
+        <span className="text-[12px] font-normal" style={{ color: "#9b92b0", lineHeight: "18px" }}>
+          {subtitle}
+        </span>
+      </div>
+      <ChevronRight size={16} style={{ color: "#c8c2d4" }} aria-hidden="true" />
+    </button>
+  );
+}
+
+// Seção de lista com título e separadores entre itens
+function ListSection({ title, items }: { title: string; items: { Icon: React.ElementType; label: string; subtitle: string }[] }) {
+  return (
+    <div className="flex flex-col">
+      <p className="px-4 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "#9b92b0", letterSpacing: "0.08em" }}>
+        {title}
+      </p>
+      <div className="flex flex-col">
+        {items.map(({ Icon, label, subtitle }, idx) => (
+          <div key={label}>
+            <ListItem Icon={Icon} label={label} subtitle={subtitle} />
+            {idx < items.length - 1 && (
+              <div className="mx-4" style={{ height: 1, background: "#f3f2f5" }} />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function ConfiguracoesScreen() {
   return (
     <div className="flex-1 flex flex-col" style={{ minHeight: 0 }}>
       {/* Header */}
       <div className="px-6 pt-6 pb-4">
-        <p
-          className="text-[11px] font-semibold uppercase tracking-widest"
-          style={{ color: "#9b92b0", letterSpacing: "0.08em" }}
-        >
-          Boas-vindas à sua contabilidade online
-        </p>
-        <h1
-          className="text-[22px] font-semibold mt-1"
-          style={{ color: "#2a2630", lineHeight: "30px" }}
-        >
+        <h1 className="text-[22px] font-semibold" style={{ color: "#2a2630", lineHeight: "30px" }}>
           Configurações
         </h1>
       </div>
 
-      {/* Lista de atalhos */}
-      <div className="flex flex-col px-6 gap-3 flex-1 overflow-y-auto scrollbar-hide pb-4">
-        {CONFIG_ITEMS.map(({ Icon, label, subtitle }) => (
+      <div className="flex flex-col gap-6 px-2 flex-1 overflow-y-auto scrollbar-hide pb-4">
+        {/* Seção Onboarding */}
+        <ListSection
+          title="Onboarding"
+          items={[
+            { Icon: Building2,  label: "Configurações da sua empresa", subtitle: "CNPJ, endereço e sócios"       },
+          ]}
+        />
+
+        {/* Seção Configurações */}
+        <ListSection
+          title="Configurações"
+          items={CONFIG_ITEMS}
+        />
+
+        {/* Sair */}
+        <div className="flex flex-col px-2">
           <button
-            key={label}
-            className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors"
-            style={{ border: "1px solid #eae6f0", background: "white" }}
+            className="flex items-center gap-4 px-4 py-3 w-full text-left rounded-xl transition-colors"
+            style={{ background: "transparent" }}
           >
-            <div
-              className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: "#f5ecfe" }}
-            >
-              <Icon size={20} style={{ color: "#7537ae" }} aria-hidden="true" />
+            <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#fde8e8" }}>
+              <LogOut size={18} style={{ color: "#c0392b" }} aria-hidden="true" />
             </div>
             <div className="flex flex-col flex-1 gap-[2px]">
-              <span
-                className="text-[15px] font-semibold"
-                style={{ color: "#2a2630", lineHeight: "22px" }}
-              >
-                {label}
-              </span>
-              <span
-                className="text-[12px] font-normal"
-                style={{ color: "#9b92b0", lineHeight: "18px" }}
-              >
-                {subtitle}
-              </span>
+              <span className="text-[15px] font-medium" style={{ color: "#c0392b", lineHeight: "22px" }}>Sair da conta</span>
+              <span className="text-[12px] font-normal" style={{ color: "#e57373", lineHeight: "18px" }}>Encerrar sessão atual</span>
             </div>
-            <ChevronRight size={18} style={{ color: "#9b92b0" }} aria-hidden="true" />
+            <ChevronRight size={16} style={{ color: "#e57373" }} aria-hidden="true" />
           </button>
-        ))}
-
-        {/* Sair — destaque vermelho suave */}
-        <button
-          className="flex items-center gap-4 px-4 py-4 rounded-2xl w-full text-left transition-colors mt-2"
-          style={{ border: "1px solid #fde8e8", background: "#fff8f8" }}
-        >
-          <div
-            className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: "#fde8e8" }}
-          >
-            <LogOut size={20} style={{ color: "#c0392b" }} aria-hidden="true" />
-          </div>
-          <div className="flex flex-col flex-1 gap-[2px]">
-            <span
-              className="text-[15px] font-semibold"
-              style={{ color: "#c0392b", lineHeight: "22px" }}
-            >
-              Sair da conta
-            </span>
-            <span
-              className="text-[12px] font-normal"
-              style={{ color: "#e57373", lineHeight: "18px" }}
-            >
-              Encerrar sessão atual
-            </span>
-          </div>
-          <ChevronRight size={18} style={{ color: "#e57373" }} aria-hidden="true" />
-        </button>
+        </div>
       </div>
     </div>
   );
